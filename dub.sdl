@@ -1,0 +1,13 @@
+name "matrixd"
+description "Lightweight matrix library for D language."
+authors "sozel"
+copyright "Copyright © 2021, sozel"
+license "proprietary"
+
+subPackage {
+	name "unit_tests" 
+	sourcePaths "source/unit_tests" "lib"
+	importPaths "lib"
+	targetName "unit_tests"
+	targetType "executable"
+}

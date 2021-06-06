@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/matrixd
+matrixd.so
+matrixd.dylib
+matrixd.dll
+matrixd.a
+matrixd.lib
+matrixd-test-*
+*.exe
+*.o
+*.obj
+*.lst
