@@ -32,60 +32,60 @@ public:
 	}
 
 	// A = [[x1, x2 ...], [y1, y2, ...]]
-    void opAssign(const double[][] matrixRHS_IN) pure {
+	void opAssign(const double[][] matrixRHS_IN) pure {
 		initialize(matrixRHS_IN.length, matrixRHS_IN[0].length, 0.0);
 		for(ulong r = 0; r < _nr; ++r) {
 			for(ulong c = 0; c < _nc; ++c) {
 				_m[r][c] = matrixRHS_IN[r][c];
 			}
 		}    	
-    }		
+	}		
 
-    // += matrix
-    // -= matrix
-    // *= matrix
-    void opOpAssign(string operation_IN)(const Matrix rhs_IN) pure {
-    	Matrix result = new Matrix(_nr, _nc, 0.0);
-    	if(operation_IN == "+"){	
+	// += matrix
+	// -= matrix
+	// *= matrix
+	void opOpAssign(string operation_IN)(const Matrix rhs_IN) pure {
+		Matrix result = new Matrix(_nr, _nc, 0.0);
+		if(operation_IN == "+"){	
 			result = this + rhs_IN;	
 			_m = result._m;		
-    	}
-    	else if(operation_IN == "-"){	
+		}
+		else if(operation_IN == "-"){	
 			result = this - rhs_IN;	
 			_m = result._m;		
-    	}    	
-    	else if(operation_IN == "*"){	
+		}    	
+		else if(operation_IN == "*"){	
 			result = this * rhs_IN;	
 			_m = result._m;		
-    	}    	
-    }    
+		}    	
+	}    
 
-    // += scalar
-    // -= scalar
-    void opOpAssign(string operation_IN)(const double rhs_IN) pure {
-    	Matrix result = new Matrix(_nr, _nc, 0.0);
-    	if(operation_IN == "+"){	
+	// += scalar
+	// -= scalar
+	void opOpAssign(string operation_IN)(const double rhs_IN) pure {
+		Matrix result = new Matrix(_nr, _nc, 0.0);
+		if(operation_IN == "+"){	
 			result = this + rhs_IN;		
 			_m = result._m;	
-    	}
-    	else if(operation_IN == "-"){	
+		}
+		else if(operation_IN == "-"){	
 			result = this - rhs_IN;		
 			_m = result._m;	
-    	}    	
-    }      
+		}    	
+	}      
 
-    // matrix + matrix
-    // matrix - matrix
-    // matrix * matrix
-    Matrix opBinary(string operation_IN)(const Matrix rhs_IN) pure const {
-    	Matrix result = new Matrix(_nr, _nc, 0.0);
-    	bool sum = operation_IN == "+";
-    	bool subtract = operation_IN == "-";
-    	bool multiply = operation_IN == "*";
-    	ulong rhs_nr = rhs_IN._nr;
-    	ulong rhs_nc = rhs_IN._nc;
-    	if(sum || subtract){
-	    	if(rhs_nr == _nr && rhs_nc == _nc) {
+	// matrix + matrix
+	// matrix - matrix
+	// matrix * matrix
+	Matrix opBinary(string operation_IN)(const Matrix rhs_IN) pure const {
+		Matrix result = new Matrix(_nr, _nc, 0.0);
+		bool sum = operation_IN == "+";
+		bool subtract = operation_IN == "-";
+		bool multiply = operation_IN == "*";
+		ulong rhs_nr = rhs_IN._nr;
+		ulong rhs_nc = rhs_IN._nc;
+		if(sum || subtract){
+			if(rhs_nr == _nr && rhs_nc == _nc) {
 				for(ulong r = 0; r < _nr; ++r) {
 					for(ulong c = 0; c < _nc; ++c) {
 						double rhs = rhs_IN._m[r][c];
@@ -97,7 +97,7 @@ public:
 						}
 					}
 				}		
-	    	}
+			}
 			else {
 				string matrix_addition_err = "matrix add/subtract: wrong dimensions.";
 				throw new Exception(matrix_addition_err);
@@ -120,41 +120,41 @@ public:
 				throw new Exception(matrix_multip_err);
 			}				
 		}
-        return result;
-    }    
+		return result;
+	}    
 
-    // matrix + scalar
-    // matrix - scalar
-    Matrix opBinary(string operation_IN)(const double rhs_IN) pure const {
-    	Matrix result = new Matrix(_nr, _nc, 0.0);
-    	if(operation_IN == "+"){	
+	// matrix + scalar
+	// matrix - scalar
+	Matrix opBinary(string operation_IN)(const double rhs_IN) pure const {
+		Matrix result = new Matrix(_nr, _nc, 0.0);
+		if(operation_IN == "+"){	
 			for(ulong r = 0; r < _nr; r++) {
 				for(ulong c = 0; c < _nc; c++) {
 					result._m[r][c] = _m[r][c] + rhs_IN;
 				}
 			}
-    	}
-    	else if(operation_IN == "-"){	
+		}
+		else if(operation_IN == "-"){	
 			for(ulong r = 0; r < _nr; r++) {
 				for(ulong c = 0; c < _nc; c++) {
 					result._m[r][c] = _m[r][c] - rhs_IN;
 				}
 			}
-    	}    	
-        return result;
-    }        
+		}    	
+		return result;
+	}        
 
 /*
-    // Get element
-    //double opCall(ulong r, ulong c){
-    //	return _m[][]
-    //}
-    double opIndexAssign(ulong r){
-    	return 2.0;
-    }
+	// Get element
+	//double opCall(ulong r, ulong c){
+	//	return _m[][]
+	//}
+	double opIndexAssign(ulong r){
+		return 2.0;
+	}
 */
 
-    // Transpose
+	// Transpose
 	Matrix T() pure const {
 		Matrix result = new Matrix(_nc, _nr, 0.0);
 		for (ulong r=0; r<result.Size()[0]; r++) {
@@ -165,7 +165,7 @@ public:
 		return result;
 	}
 
-    // Sums all elements
+	// Sums all elements
 	double Sum() pure const {
 		double result = 0.0;
 		for(ulong r = 0; r < _nr; r++) {
@@ -191,7 +191,7 @@ public:
 		}
 	}	
 
-    // [rows, cols]
+	// [rows, cols]
 	ulong[2] Size() pure const {
 		return [_nr, _nc];
 	}    
