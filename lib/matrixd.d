@@ -32,6 +32,26 @@ pure {
 	initialize(rowLength_IN, columnLength_IN, n);
 }
 
+// A = double[][]
+this(const double[][] matrixRHS_IN) pure {
+	initialize(matrixRHS_IN.length, matrixRHS_IN[0].length, 0.0);
+	for(ulong r = 0; r < _nr; ++r) {
+		for(ulong c = 0; c < _nc; ++c) {
+			_m[r][c] = matrixRHS_IN[r][c];
+		}
+	}   	
+}
+
+// A = double[]
+this(const double[] rowvectorRHS_IN) pure {
+	initialize(1, rowvectorRHS_IN.length, 0.0);
+	for(ulong r = 0; r < _nr; ++r) {
+		for(ulong c = 0; c < _nc; ++c) {
+			_m[r][c] = rowvectorRHS_IN[c];
+		}
+	}   	
+}
+
 // A = [[x1, x2 ...], [y1, y2, ...]]
 void opAssign(const double[][] matrixRHS_IN) pure {
 	initialize(matrixRHS_IN.length, matrixRHS_IN[0].length, 0.0);
@@ -217,6 +237,68 @@ Matrix T() pure const {
 	return transpose;
 }
 
+Matrix Inv() pure const
+{
+	ulong nr = Size()[0];
+	ulong nc = Size()[1];
+
+	if(nr == nc) {	
+	    // Find determinant of A[][] 
+	    double determinant = Det(nr); 
+	    if (determinant == 0) { 
+	        throw new Exception("Inverse error: determinant must be non-zero\n"); 
+	    } 
+	  
+	    // Inverse
+	    Matrix inverse = new Matrix(nr,nr,0.0);
+
+	    // Find adjoint 
+	    Matrix adj = new Matrix(nr, nr, 0.0);
+	    adjoint(adj); 
+
+	    // Find Inverse using formula "inverse(A) = adj(A)/det(A)" 
+	    for (ulong i=0; i<nr; i++) 
+	        for (ulong j=0; j<nr; j++) 
+	        	inverse[i,j] = adj[i,j]/determinant;
+	  
+	    return inverse; 
+    }	
+	else {
+		throw new Exception("Inverse error: not square\n");
+	}    
+}
+
+// Obtained from geeks-for-geeks: https://www.geeksforgeeks.org/determinant-of-a-matrix/
+double Det(ulong n) pure const {
+	ulong nr = Size()[0];
+	ulong nc = Size()[1];
+
+	if(nr == nc) {
+		//  Base case : if matrix contains single element 
+		double D = 0; // Initialize result 
+		if (n == 1) return _m[0][0]; 
+
+		//std::vector<std::vector<double>> temp(n, std::vector<double>(n)); // To store cofactors 
+		Matrix temp = new Matrix(n,n,0.0); // To store cofactors 
+
+		int sign = 1;  // To store sign multiplier 
+
+		// Iterate for each element of first row 
+		for (ulong f = 0; f < n; f++) {
+			// Getting Cofactor of mat[0][f] 
+			cofactor(temp, 0, f, n); 
+			D += sign * _m[0][f] * temp.Det(n - 1); 
+			// terms are to be added with alternate sign 
+			sign = -sign; 
+		}
+
+		return D;	
+	}
+	else {
+		throw new Exception("Determinant error: not square\n");
+	}
+}
+
 // Sums all elements
 double Sum() pure const {
 	double all_sum = 0.0;
@@ -271,6 +353,60 @@ pure {
 		throw new Exception("Matrix dimensions can't be zero.");
 	}
 }
+
+// Obtained from geeks-for-geeks: https://www.geeksforgeeks.org/determinant-of-a-matrix/
+void cofactor(ref Matrix temp, ulong p, ulong q, ulong n) pure const {
+    ulong i = 0, j = 0; 
+  
+    // Looping for each element of the matrix 
+    for (ulong row = 0; row < n; row++) { 
+        for (ulong col = 0; col < n; col++) { 
+            //  Copying into temporary matrix only those element 
+            //  which are not in given row and column 
+            if (row != p && col != q) { 
+            	//temp.Set(i,j++,_m[row][col]);
+                temp[i,j++] = _m[row][col]; 
+  
+                // Row is filled, so increase row index and 
+                // reset col index 
+                if (j == n - 1) { 
+                    j = 0; 
+                    i++; 
+                } 
+            } 
+        } 
+    } 	
+}
+
+// Obtained from geeks-for-geeks: https://www.geeksforgeeks.org/adjoint-inverse-matrix/
+void adjoint(ref Matrix adj) pure const
+{ 
+	ulong N = _nr;
+    if (N == 1) { 
+        adj[0,0] = 1.0; 
+        return; 
+    } 
+  
+    // temp is used to store cofactors of A[][] 
+    int sign = 1;
+    //std::vector<std::vector<double>> temp(N, std::vector<double>(N)); // To store cofactors 
+  	Matrix temp = new Matrix(N, N, 0.0);
+
+    for (ulong i=0; i<N; i++) { 
+        for (ulong j=0; j<N; j++) { 
+            // Get cofactor of A[i][j] 
+            cofactor(temp, i, j, N); 
+
+            // sign of adj[j][i] positive if sum of row 
+            // and column indexes is even. 
+            sign = ((i+j)%2==0)? 1: -1; 
+  
+            // Interchanging rows and columns to get the 
+            // transpose of the cofactor matrix 
+            adj[j,i] = (sign)*(temp.Det(N-1));
+        } 
+    } 
+} 
 
 ulong _nr = 0;
 ulong _nc = 0;

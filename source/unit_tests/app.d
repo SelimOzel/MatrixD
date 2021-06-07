@@ -67,36 +67,15 @@ void main() {
 	assert(A*B[0].T() == A*C);
 
 	writeln(PrintMatrix(A*B[0].T())); // Convert B to column vector and multiply with 2x3 matrix. 
-}
-
-/*
-int main()
-{
-
-	Matrix state(3, 1, 0.0);
-	state = std::vector<double> {2,2,2}; // I STRONGLY suggest using this convention WHEN declaring column vectors.
-	Matrix::Size(state);
-	C = A*state;
-
-	Matrix D(std::vector<double> {2,2,2}); // Vector based constructor tests. 
-	assert(state == D);
-	assert (D.Size()[0] == 3 && D.Size()[1] == 1);
-	assert(D(0,0) == 2 && D(1,0) == 2 && D(0,0) == 2);
-	Matrix E(std::vector<std::vector<double>> {{2,0,1},{0,2,1}});
-	assert(A == E);
 
 	// Determinant and inverse tests
-	E = {
-			{1, 0, 2, -1},   
-			{3, 0, 0, 5},   
-			{2, 1, 4, -3},   
-			{1, 0, 5, 0}   
-	};   
-	assert(30 == E.Det(E.Size()[0]));
-	Matrix::Print(E*E.Inv());
-	std::cout<<"\n";
+	Matrix D = new Matrix(
+	[[1.0, 0.0, 2.0, -1.0],   
+	[ 3.0, 0.0, 0.0,  5.0],
+	[ 2.0, 1.0, 4.0, -3.0],
+	[ 1.0, 0.0, 5.0,  0.0]]);   
+	assert(30 == D.Det(D.Size()[0]));
+	writeln(PrintMatrix(D*D.Inv()));
 
-	std::cout<< "Matrix tests passed!\n";
-	return 1;
-} 
-*/
+	writeln("Matrix tests passed!");
+}
