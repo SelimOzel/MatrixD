@@ -47,32 +47,31 @@ void main() {
 	B = [[3,2],[1,4],[1,5]]; // 3x2
 	A *= B;
 	B = A.T();
-	//A[0][1];
+
+	writeln(PrintMatrix(A));
+	writeln(A[0,0]);
+	writeln(A[0,1]);
+	writeln(A.Sum(0));
+	assert(A[0,0] + A[0,1] == A.Sum(0));
+	assert(A[1,0] + A[1,1] == A.Sum(1));
+	assert(A[2,0] + A[2,1] == A.Sum(2)); // row sum verifications
+	assert(A.Sum() == A.Sum(0)+A.Sum(1)+A.Sum(2)); // row sum equals all element sum	
+
+	writeln(PrintMatrix(B.T()));
+	writeln(PrintMatrix(A));
+	assert(B.T() == A);
+	writeln(PrintMatrix(A));
+	writeln(PrintMatrix(B[0])); // {12,8,3}
+	C = B[0].T(); // Convert a row to column vector
+	A = [[2,0,1],[0,2,1]]; 
+	assert(A*B[0].T() == A*C);
+
+	writeln(PrintMatrix(A*B[0].T())); // Convert B to column vector and multiply with 2x3 matrix. 
 }
 
 /*
 int main()
 {
-	assert(A(0,0) + A(0,1) == A.Sum(0));
-	assert(A(1,0) + A(1,1) == A.Sum(1));
-	assert(A(2,0) + A(2,1) == A.Sum(2)); // row sum verifications
-	assert(A.Sum() == A.Sum(0)+A.Sum(1)+A.Sum(2)); // row sum equals all element sum	
-	assert(B.T() == A);
-
-	Matrix::Print(A);
-	std::cout<<"\n";	
-
-	Matrix::Print(B[0].T()); // {12,8,3}
-	std::cout<<"\n";
-
-	C = B[0].T(); // Convert a row to column vector
-	A = {{{2,0,1}},{{0,2,1}}}; 
-	assert(A*B[0].T() == A*C);
-
-	Matrix::Size(A);
-	Matrix::Size(C);
-	Matrix::Print(A*B[0].T()); // Convert B to column vector and multiply with 2x3 matrix. 
-	std::cout<<"\n";
 
 	Matrix state(3, 1, 0.0);
 	state = std::vector<double> {2,2,2}; // I STRONGLY suggest using this convention WHEN declaring column vectors.

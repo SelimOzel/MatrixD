@@ -4,8 +4,8 @@ module matrixd;
 import std.conv: to; 
 
 // Enums
-enum uint MAXROWS = 10000;
-enum uint MAXCOLUMNS = 10000;
+enum uint MAXROWS = 100;
+enum uint MAXCOLUMNS = 100;
 
 // Output is csv
 string PrintMatrix(const Matrix matrix_IN) {
@@ -56,7 +56,9 @@ void opOpAssign(string operation_IN)(const Matrix rhs_IN) pure {
 	}    	
 	else if(operation_IN == "*"){	
 		result = this * rhs_IN;	
-		_m = result._m;		
+		_m = result._m;
+		_nr = result.Size()[0];
+		_nc = result.Size()[1];
 	}    	
 }    
 
@@ -144,15 +146,38 @@ Matrix opBinary(string operation_IN)(const double rhs_IN) pure const {
 	return result;
 }        
 
-/*
-// Get element
-//double opCall(ulong r, ulong c){
-//	return _m[][]
-//}
-double opIndexAssign(ulong r){
-	return 2.0;
+// A == B
+override bool opEquals(Object o) pure const {
+	auto rhs = cast(const Matrix)o;
+	if(rhs.Size()[0] == Size()[0] && rhs.Size[1] == Size[1]){
+		for(ulong r = 0; r<rhs._nr; ++r) {
+			for(ulong c = 0; c<rhs._nc; ++c) {
+				if(rhs[r,c] != _m[r][c]) return false;
+			}
+		}
+	}
+	else return false;
+	return true;
 }
-*/
+
+// A[1,2] = x
+void opIndexAssign(double val, ulong r, ulong c) pure {
+	_m[r][c] = val;
+}
+
+// x = A[1,2]
+double opIndex(ulong r, ulong c) pure const {
+	return _m[r][c];
+}
+
+// [x1, x2, ...] = A[1]
+Matrix opIndex(ulong r) pure const {
+	Matrix rowVector = new Matrix(1, _nc, 0.0);
+	for (ulong c = 0; c<_nc; ++c) {
+		rowVector[0, c] = _m[r][c];
+	}
+	return rowVector;
+}
 
 // Transpose
 Matrix T() pure const {
