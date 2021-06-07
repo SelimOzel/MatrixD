@@ -27,7 +27,8 @@ public:
 this(
 	const ulong rowLength_IN, 
 	const ulong columnLength_IN, 
-	const double n) pure {
+	const double n) 
+pure {
 	initialize(rowLength_IN, columnLength_IN, n);
 }
 
@@ -64,6 +65,8 @@ void opOpAssign(string operation_IN)(const Matrix rhs_IN) pure {
 
 // += scalar
 // -= scalar
+// *= scalar
+// /= scalar
 void opOpAssign(string operation_IN)(const double rhs_IN) pure {
 	Matrix result = new Matrix(_nr, _nc, 0.0);
 	if(operation_IN == "+"){	
@@ -73,7 +76,15 @@ void opOpAssign(string operation_IN)(const double rhs_IN) pure {
 	else if(operation_IN == "-"){	
 		result = this - rhs_IN;		
 		_m = result._m;	
-	}    	
+	}
+	else if(operation_IN == "*"){	
+		result = this * rhs_IN;		
+		_m = result._m;	
+	}
+	else if(operation_IN == "/"){	
+		result = this / rhs_IN;		
+		_m = result._m;	
+	}  		 	
 }      
 
 // matrix + matrix
@@ -127,6 +138,8 @@ Matrix opBinary(string operation_IN)(const Matrix rhs_IN) pure const {
 
 // matrix + scalar
 // matrix - scalar
+// matrix * scalar
+// matrix / scalar
 Matrix opBinary(string operation_IN)(const double rhs_IN) pure const {
 	Matrix result = new Matrix(_nr, _nc, 0.0);
 	if(operation_IN == "+"){	
@@ -142,7 +155,21 @@ Matrix opBinary(string operation_IN)(const double rhs_IN) pure const {
 				result._m[r][c] = _m[r][c] - rhs_IN;
 			}
 		}
-	}    	
+	}   
+	else if(operation_IN == "*"){	
+		for(ulong r = 0; r < _nr; r++) {
+			for(ulong c = 0; c < _nc; c++) {
+				result._m[r][c] = _m[r][c] * rhs_IN;
+			}
+		}
+	} 
+	else if(operation_IN == "/"){	
+		for(ulong r = 0; r < _nr; r++) {
+			for(ulong c = 0; c < _nc; c++) {
+				result._m[r][c] = _m[r][c] / rhs_IN;
+			}
+		}
+	} 			 	
 	return result;
 }        
 
@@ -172,43 +199,43 @@ double opIndex(ulong r, ulong c) pure const {
 
 // [x1, x2, ...] = A[1]
 Matrix opIndex(ulong r) pure const {
-	Matrix rowVector = new Matrix(1, _nc, 0.0);
+	Matrix row_vector = new Matrix(1, _nc, 0.0);
 	for (ulong c = 0; c<_nc; ++c) {
-		rowVector[0, c] = _m[r][c];
+		row_vector[0, c] = _m[r][c];
 	}
-	return rowVector;
+	return row_vector;
 }
 
 // Transpose
 Matrix T() pure const {
-	Matrix result = new Matrix(_nc, _nr, 0.0);
-	for (ulong r=0; r<result.Size()[0]; r++) {
-		for (ulong c=0; c<result.Size()[1]; c++) {
-			result._m[r][c] = _m[c][r];
+	Matrix transpose = new Matrix(_nc, _nr, 0.0);
+	for (ulong r=0; r<transpose.Size()[0]; r++) {
+		for (ulong c=0; c<transpose.Size()[1]; c++) {
+			transpose._m[r][c] = _m[c][r];
 		}
 	}
-	return result;
+	return transpose;
 }
 
 // Sums all elements
 double Sum() pure const {
-	double result = 0.0;
+	double all_sum = 0.0;
 	for(ulong r = 0; r < _nr; r++) {
 		for(ulong c = 0; c < _nc; c++) {
-			result += _m[r][c];
+			all_sum += _m[r][c];
 		}
 	}
-	return result;		
+	return all_sum;		
 }    
 
 // Sums all elements in row r.
 double Sum(const ulong r) pure const {
 	if(r < _nr) {
-		double result = 0.0;
+		double row_sum = 0.0;
 		for(ulong c = 0; c < _nc; c++) {
-			result += _m[r][c];
+			row_sum += _m[r][c];
 		}
-		return result;	
+		return row_sum;	
 	}
 	else {
 		string sum_row_err = "Sum row: index out of bounds";
@@ -225,7 +252,8 @@ private:
 void initialize(
 	const ulong r_IN, 
 	const ulong c_IN, 
-	const double n_IN) pure {
+	const double n_IN) 
+pure {
 	string initialize_err_maxrow = "initialize: Increase MAXROWS.";
 	string initialize_err_maxcolumn = "initialize: Increase MAXCOLUMNS.";		
 	if(r_IN > MAXROWS) throw new Exception(initialize_err_maxrow);
