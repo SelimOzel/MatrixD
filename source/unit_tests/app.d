@@ -78,6 +78,8 @@ void main() {
 	writeln(PrintMatrix(D*D.Inv()));
 
 	Matrix E = new Matrix([2:10]); // [2,3,4,5,6,7,8,9,10]
+	Matrix F = new Matrix([2,3,4,5,6,7,8,9,10]);
+	assert(E == F);
 	writeln(PrintMatrix(E));
 	writeln("Matrix tests passed!");
 }
