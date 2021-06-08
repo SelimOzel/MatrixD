@@ -9,7 +9,7 @@ enum uint MAXROWS = 10;
 enum uint MAXCOLUMNS = 1001;
 
 // Output is csv
-string print(const Matrix matrix_IN) {
+string toCSV(const Matrix matrix_IN) {
 	string result;
 	for(ulong r = 0; r < matrix_IN._nr; ++r) {
 		for(ulong c = 0; c < matrix_IN._nc; ++c) {
@@ -21,14 +21,36 @@ string print(const Matrix matrix_IN) {
 	return result;
 }
 
+// vector output as double
+double[] toDouble_v(Matrix matrix_IN) {
+	double[] matrix_double;
+	for(ulong c = 0; c < matrix_IN._nc; ++c) {
+		matrix_double ~= matrix_IN._m[0][c];
+	}	
+	return matrix_double;
+}
+
+// matrix output as double
+double[][] toDouble_m(Matrix matrix_IN) {
+	double[][] matrix_double;
+	for(ulong r = 0; r < matrix_IN._nr; ++r) {
+		matrix_double ~= [[matrix_IN._m[r][0]]];
+		for(ulong c = 1; c < matrix_IN._nc; ++c) {
+			matrix_double[r] ~= matrix_IN._m[r][c];
+		}
+	}	
+	return matrix_double;
+}
+
+// for each element in the matrix
 Matrix sin(const Matrix matrix_IN) pure {
-	Matrix result = new Matrix(matrix_IN.Size()[0], matrix_IN.Size()[1], 0.0);
+	Matrix sin_matrix = new Matrix(matrix_IN.Size()[0], matrix_IN.Size()[1], 0.0);
 	for(ulong r = 0; r < matrix_IN._nr; ++r) {
 		for(ulong c = 0; c < matrix_IN._nc; ++c) {
-			result[r,c] = sin(matrix_IN._m[r][c]);
+			sin_matrix[r,c] = sin(matrix_IN._m[r][c]);
 		}
 	}
-	return result;
+	return sin_matrix;
 }
 
 // Lightweight
@@ -360,10 +382,6 @@ double Sum(const ulong r) pure const {
 ulong[2] Size() pure const {
 	return [_nr, _nc];
 }    
-
-//T toDouble()() if (_nr == 1) {T = doube[]}{
-//	
-//}
 
 private:
 void initialize(
