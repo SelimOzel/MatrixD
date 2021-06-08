@@ -77,5 +77,7 @@ void main() {
 	assert(30 == D.Det(D.Size()[0]));
 	writeln(PrintMatrix(D*D.Inv()));
 
+	Matrix E = new Matrix([2:10]); // [2,3,4,5,6,7,8,9,10]
+	writeln(PrintMatrix(E));
 	writeln("Matrix tests passed!");
 }

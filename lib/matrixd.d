@@ -52,6 +52,26 @@ this(const double[] rowvectorRHS_IN) pure {
 	}   	
 }
 
+// A = [1:10]
+this(const ulong[ulong] x) {
+	import std.stdio;
+	if(x.length == 1) {
+		foreach(val; x.keys) {
+			writeln(val);
+			writeln(x[val]);
+			initialize(1, x[val]-val+1, 0.0);
+			for(ulong r = 0; r < _nr; ++r) {
+				for(ulong c = 0; c < _nc; ++c) {
+					_m[r][c] = c+val;
+				}
+			}   			
+		}
+	}
+	else {
+		throw new Exception("Associative array length must be 1.");
+	}
+}
+
 // A = [[x1, x2 ...], [y1, y2, ...]]
 void opAssign(const double[][] matrixRHS_IN) pure {
 	initialize(matrixRHS_IN.length, matrixRHS_IN[0].length, 0.0);
@@ -237,8 +257,7 @@ Matrix T() pure const {
 	return transpose;
 }
 
-Matrix Inv() pure const
-{
+Matrix Inv() pure const {
 	ulong nr = Size()[0];
 	ulong nc = Size()[1];
 
