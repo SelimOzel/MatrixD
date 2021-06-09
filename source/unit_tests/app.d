@@ -93,5 +93,8 @@ void main() {
 	Y = Y + matrixd.noise(X, 0.0, 0.1); // add noise vector
 
 	assert(toDouble_v(Y).length == toDouble_v(X).length);
+
+	Matrix G = new Matrix();
+	assert(G.empty() == true);
 	writeln("Matrix tests passed!");
 }
