@@ -69,8 +69,6 @@ Matrix noise(const Matrix matrix_IN, double mean, double var) {
 class Matrix {
 public:
 this() {
-	_nr = 0;
-	_nc = 0;
 }
 
 // nxm filled with n
