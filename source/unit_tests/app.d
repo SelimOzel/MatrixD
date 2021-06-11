@@ -96,5 +96,10 @@ void main() {
 
 	Matrix G = new Matrix();
 	assert(G.empty() == true);
+	G = [[2,4],[4,8],[12,24]];
+	G /= 2.0;
+	assert(G[0,1] == 2);
+	G[1,1] = G[1,1] / 2.0;
+	assert(G[1, 1] == 2);
 	writeln("Matrix tests passed!");
 }
