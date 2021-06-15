@@ -1,5 +1,5 @@
 name "matrixd"
-description "Lightweight matrix library for D language."
+description "Follow the white rabbit."
 authors "sozel"
 copyright "Copyright © 2021, sozel"
 license "proprietary"
@@ -10,4 +10,5 @@ subPackage {
 	importPaths "lib"
 	targetName "unit_tests"
 	targetType "executable"
+	dependency "matplotlib-d" version="~>0.1.4"
 }

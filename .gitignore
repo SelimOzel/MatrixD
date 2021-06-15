@@ -13,3 +13,5 @@ matrixd-test-*
 *.o
 *.obj
 *.lst
+*.png
+dub.selections.json
