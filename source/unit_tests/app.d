@@ -10,6 +10,7 @@ sin,
 toCSV, 
 toDouble_m, 
 toDouble_v;
+
 import matrixd.statistics:  
 compute_correlation,
 compute_mean, 
@@ -25,6 +26,7 @@ void main() {
 
 	bool test_matrix = true;
 	bool test_statistics = true; // just a bunch of thing I want to call easily
+	bool test_filters = true;
 
 	if(test_matrix) {
 		Matrix A = new Matrix(2, 2, 1.0); // 2x2 matrix with all elements 1.
@@ -144,7 +146,7 @@ void main() {
 		plt.plot(t, time_series_1, "r-", ["label": "$rho<1$"]);
 		plt.plot(time_series_2, "b-", ["label": "$rho<1$"]);
 		plt.legend();
-		plt.savefig("Stationary_Process.png");
+		plt.savefig("statistics_stationary_process.png");
 		plt.clear();
 
 		// Non-Stationary process
@@ -158,7 +160,49 @@ void main() {
 		plt.plot(time_series_1, "r-", ["label": "$rho=1$"]);
 		plt.plot(time_series_2, "b-", ["label": "$rho=1$"]);
 		plt.legend();
-		plt.savefig("Non-Stationary_Process.png");
+		plt.savefig("statistics_non_stationary_process.png");
 		plt.clear();
+
+		double[] time_series_3;
+		double[] time_series_4;
+
+		// Stationary process
+		time_series_3 = generate_autoregressive_process(0.0, 0.9, 1.0, 1000);
+		time_series_4 = generate_autoregressive_process(0.0, 0.9, 1.0, 1000);
+		plt.plot(time_series_3, time_series_4, "r-", ["label": "$rho<1$"]);
+		plt.legend();
+		plt.savefig("statistics_ugly_phases.png");
+		plt.clear();
+
+		// Non-Stationary process
+		time_series_3 = generate_autoregressive_process(0.0, 1.0, 1.0, 1000);
+		time_series_4 = generate_autoregressive_process(0.0, 1.0, 1.0, 1000);
+		plt.plot(time_series_3, time_series_4, "r-", ["label": "$rho=1$"]);
+		plt.legend();
+		plt.savefig("statistics_nice_phases.png");
+		plt.clear();		
+
+		double[] time_series;
+		double[] time_series_estimated;
+		double[2] ols;
+
+		int l = 1000;
+		double[] t2;
+		for (int i = 0; i<l; i++) {t2 ~= i;}
+
+		time_series = generate_autoregressive_process(0.1, 1.0, 1.0, l);
+		ols = compute_ordinary_least_squares(t2, time_series);
+		for (int i = 0; i<l; i++) {time_series_estimated ~= ols[0] + ols[1]*i;}
+
+		plt.plot(t2, time_series, "o", ["markersize": 0.5]);
+		plt.plot(t2, time_series_estimated, "r-");
+		plt.legend();
+		plt.grid();
+		plt.savefig("statistics_ordinary_least_squares.png");
+		plt.clear();		
+	}
+
+	if(test_filters) {
+
 	}
 }
