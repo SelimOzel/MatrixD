@@ -1,6 +1,6 @@
 import std.math: sin, PI;
 import std.stdio;
-import matrixd;
+import matrixd.matrix: Matrix, sin, noise, toCSV, toDouble_m, toDouble_v;
 
 void main() {
 	writeln("Starting matrix tests ...");
@@ -89,8 +89,8 @@ void main() {
 	writeln(toCSV(E[0]));
 
 	Matrix X = new Matrix([0:1000])*PI/1000.0; // create x-axis ending at pi
-	Matrix Y = matrixd.sin(X); // full period sine wave
-	Y = Y + matrixd.noise(X, 0.0, 0.1); // add noise vector
+	Matrix Y = sin(X); // full period sine wave
+	Y = Y + noise(X, 0.0, 0.1); // add noise vector
 
 	assert(toDouble_v(Y).length == toDouble_v(X).length);
 

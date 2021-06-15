@@ -1,4 +1,4 @@
-module matrixd;
+module matrixd.matrix;
 
 // D
 import std.conv: to; 
