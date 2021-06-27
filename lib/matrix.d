@@ -319,12 +319,12 @@ Matrix[2] LU_Decomposition() pure const {
 	if(nr == nc) {	
 	    // Decomposing matrix into Upper and Lower
 	    // triangular matrix
-	    for (int i = 0; i < nr; i++) {
+	    for (ulong i = 0; i < nr; i++) {
 	        // Upper Triangular
-	        for (int k = i; k < nr; k++) {
+	        for (ulong k = i; k < nr; k++) {
 	            // Summation of L(i, j) * U(j, k)
 	            double sum = 0;
-	            for (int j = 0; j < i; j++)
+	            for (ulong j = 0; j < i; j++)
 	                sum += (lower[i,j] * upper[j,k]);
 	 
 	            // Evaluating U(i, k)
@@ -332,13 +332,13 @@ Matrix[2] LU_Decomposition() pure const {
 	        }
 	 
 	        // Lower Triangular
-	        for (int k = i; k < nr; k++) {
+	        for (ulong k = i; k < nr; k++) {
 	            if (i == k)
 	                lower[i,i] = 1; // Diagonal as 1
 	            else {
 	                // Summation of L(k, j) * U(j, i)
 	                double sum = 0;
-	                for (int j = 0; j < i; j++)
+	                for (ulong j = 0; j < i; j++)
 	                    sum += (lower[k,j] * upper[j,i]);
 	 
 	                // Evaluating L(k, i)
