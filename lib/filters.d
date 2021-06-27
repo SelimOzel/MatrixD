@@ -201,7 +201,21 @@ Matrix filtfilt(Matrix B, Matrix A, const Matrix X) {
 	for(ulong i = 0; i<nfilt-1; ++i) {
 		aa_segment[0,i] = aa[0,i+1]; 
 	}		
+
+	////////// WIP:
+	import matrixd.matrix: toCSV;
+	import std.conv: to;
+	import std.datetime.stopwatch: StopWatch, AutoStart;
+	auto myStopWatch = StopWatch(AutoStart.no);
+	myStopWatch.start();
+	writeln(toCSV(sp));
 	Matrix zzi = sp.Inv()*(bb_segment - (aa_segment * bb[0,0])).T();
+	myStopWatch.stop();
+
+	writeln("9x9 Matrix inversion takes: "~to!string((to!double(myStopWatch.peek.total!"usecs")*0.001))~" ms");
+	myStopWatch.reset();
+	////////// WIP:
+
     for(int i = 0; i<zzi.Size()[1]; ++i) {
     	zi ~= 0.0;
     }

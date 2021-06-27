@@ -28,8 +28,8 @@ import plt = matplotlibd.pyplot;
 void main() {
 	writeln("Starting matrix tests ...");
 
-	bool test_matrix = true;
-	bool test_statistics = true; // just a bunch of thing I want to call easily
+	bool test_matrix = false;
+	bool test_statistics = false; // just a bunch of thing I want to call easily
 	bool test_filters = true;
 
 	if(test_matrix) {
@@ -226,8 +226,9 @@ void main() {
 		Matrix y_filter_out_d; 
 		Matrix y_filtfilt_d;
 		y_filter_out_d = filter(b_coeff, a_coeff, input_signal, zi);
+		
 		y_filtfilt_d = filtfilt(b_coeff, a_coeff, input_signal);
-
+/*
 		// Fig - filter: input, cpp out, dlang out
 		plt.plot(Y.toDouble_v, "b-");
 		plt.plot(y_filter_out_cpp.toDouble_v, "r-");
@@ -249,5 +250,6 @@ void main() {
 		plt.grid();
 		plt.savefig("filters_filtfilt.png");
 		plt.clear();	
+		*/
 	}
 }
