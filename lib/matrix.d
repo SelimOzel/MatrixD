@@ -307,7 +307,7 @@ Matrix T() pure const {
 }
 
 // Lower upper triangle decomposition
-Matrix[2] LU_Decomposition() {
+Matrix[2] LU_Decomposition() pure const {
 	Matrix[2] result;
 
 	ulong nr = Size()[0];
@@ -385,6 +385,16 @@ Matrix Inv() pure const {
 	else {
 		throw new Exception("Inverse error: not square\n");
 	}    
+}
+
+double Det_LU() pure const {
+	Matrix[2] LU = LU_Decomposition();
+	ulong nr = Size()[0];
+	double det = 1.0;
+	for(int i = 0; i< nr; ++i) {
+		det *= LU[1][i,i];
+	}
+	return det;
 }
 
 // Obtained from geeks-for-geeks: https://www.geeksforgeeks.org/determinant-of-a-matrix/

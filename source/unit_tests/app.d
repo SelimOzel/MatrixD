@@ -28,7 +28,7 @@ import plt = matplotlibd.pyplot;
 void main() {
 	writeln("Starting matrix tests ...");
 
-	bool test_matrix = false;
+	bool test_matrix = true;
 	bool test_matrix_inverse = true;
 	bool test_statistics = false; // just a bunch of thing I want to call easily
 	bool test_filters = false;
@@ -105,6 +105,17 @@ void main() {
 		[ 2.0, 1.0, 4.0, -3.0],
 		[ 1.0, 0.0, 5.0,  0.0]]);   
 		assert(30 == D.Det(D.Size()[0]));
+
+		D.LU_Decomposition();
+		Matrix[2] LU_D = D.LU_Decomposition();
+
+		writeln(toCSV(D));
+		writeln(toCSV(LU_D[0]));
+		writeln(toCSV(LU_D[1]));	
+
+		writeln("Determinants");
+		writeln(D.Det_LU());
+		writeln(D.Det(D.Size()[0]));
 		writeln(toCSV(D*D.Inv()));
 
 		writeln(toCSV(A)); // check row/cols are matching
@@ -154,7 +165,8 @@ void main() {
 
 		writeln(toCSV(Ten));
 		writeln(toCSV(LU[0]));
-		writeln(toCSV(LU[1]));		
+		writeln(toCSV(LU[1]));	
+		writeln(Ten.Det_LU());	
 		//assert(0 < Ten.Det(Ten.Size()[0]));
 
 		myStopWatch.stop();
