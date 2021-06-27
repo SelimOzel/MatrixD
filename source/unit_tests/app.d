@@ -148,6 +148,17 @@ void main() {
 		import matrixd.matrix: toCSV;
 		import std.conv: to;
 		import std.datetime.stopwatch: StopWatch, AutoStart;
+
+		Matrix Three = new Matrix(
+		[[ 2.0, -1.0, -2.0],
+		[ -4.0,  6.0,  3.0],
+		[ -4.0, -2.0,  8.0]]);
+		Matrix[2] LU = Three.LU_Decomposition();
+		writeln(toCSV(Three));
+		writeln(toCSV(LU[0]));
+		writeln(toCSV(LU[1]));	
+		writeln(Three.Det_LU());	
+
 		auto myStopWatch = StopWatch(AutoStart.no);
 		myStopWatch.start();
 		Matrix Ten = new Matrix(
@@ -161,7 +172,7 @@ void main() {
 		[ 9.0, 2.0, 2.0, 2.0, 9.0, 2.0, 2.0, 4.0, 5.0, 4.0],
 		[ 6.0, 7.0, 2.0, 3.0, 9.0, 4.0, 2.0, 7.0, 7.0, 8.0],
 		[ 8.0, 0.0, 8.0, 8.0, 4.0, 0.0, 5.0, 7.0, 1.0, 0.0]]);
-		Matrix[2] LU = Ten.LU_Decomposition();
+		LU = Ten.LU_Decomposition();
 
 		writeln(toCSV(Ten));
 		writeln(toCSV(LU[0]));
