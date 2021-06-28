@@ -317,6 +317,34 @@ Matrix[2] LU_Decomposition() pure const {
 	Matrix upper = new Matrix(nr, nc, 0.0);
 
 	if(nr == nc) {	
+
+		int i = 0, j = 0, k = 0;
+		for (i = 0; i < nr; i++) {
+		  for (j = 0; j < nr; j++) {
+		     if (j < i)
+		     lower[j,i] = 0;
+		     else {
+		        lower[j,i] = _m[j][i];
+		        for (k = 0; k < i; k++) {
+		           lower[j,i] = lower[j,i] - lower[j,k] * upper[k,i];
+		        }
+		     }
+		  }
+		  for (j = 0; j < nr; j++) {
+		     if (j < i)
+		     upper[i,j] = 0;
+		     else if (j == i)
+		     upper[i,j] = 1;
+		     else {
+		        upper[i,j] = _m[i][j] / lower[i,i];
+		        for (k = 0; k < i; k++) {
+		           upper[i,j] = upper[i,j] - ((lower[i,k] * upper[k,j]) / lower[i,i]);
+		        }
+		     }
+		  }
+		}
+
+		/*
 	    // Decomposing matrix into Upper and Lower
 	    // triangular matrix
 	    for (ulong i = 0; i < nr; i++) {
@@ -347,6 +375,7 @@ Matrix[2] LU_Decomposition() pure const {
 	            }
 	        }
 	    }
+	    */
 	}
 	else {
 		throw new Exception("LU Decomposition error: not square\n");
