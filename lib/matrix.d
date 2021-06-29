@@ -307,17 +307,61 @@ Matrix T() pure const {
 }
 
 // Lower upper triangle decomposition
-Matrix[2] LU_Decomposition() pure const {
-	Matrix[2] result;
+Matrix[3] LU_Decomposition() pure const {
+	import std.math: abs;
+	import std.numeric: CustomFloat;
+	Matrix[3] result;
 
 	ulong nr = Size()[0];
 	ulong nc = Size()[1];
 
 	Matrix lower = new Matrix(nr, nc, 0.0);
 	Matrix upper = new Matrix(nr, nc, 0.0);
+	Matrix pivot = new Matrix(nr, nr, 0.0);
 
 	if(nr == nc) {	
 
+    	Matrix perm = new Matrix([0:nc]);     	
+    	Matrix input1 = this;
+
+	    for (ulong j = 0; j < nr; ++j) {
+	        ulong max_index = j;
+	        double max_value = 0;
+	        for (ulong i = j; i < nr; ++i) {
+	            double value = abs(input1[perm[i], j]);
+	            if (value > max_value) {
+	                max_index = i;
+	                max_value = value;
+	            }
+	        }
+	        if (max_value <= epsilon)
+	            throw new Exception("matrix is singular");
+	        if (j != max_index) {
+	        	double dummy = perm[0,j];
+	        	perm[0, j] = perm[0, max_index];
+	        	perm[0, max_inde] = dummy;
+	        }
+	        ulong jj = perm[j];
+	        for (ulong i = j + 1; i < n; ++i) {
+	            ulong ii = perm[i];
+	            input1[ii, j] /= input1[jj, j];
+	            for (ulong k = j + 1; k < nr; ++k)
+	                input1(ii, k) -= input1[ii, j] * input1[jj, k];
+	        }
+	    }
+ 
+	    for (ulong j = 0; j < nr; ++j) {
+	        lower[j, j] = 1;
+	        for (ulong i = j + 1; i < nr; ++i)
+	            lower[i, j] = input1[perm[0, i], j];
+	        for (size_t i = 0; i <= j; ++i)
+	            upper[i, j] = input1[perm[0, i], j];
+	    }
+ 
+    	for (ulong i = 0; i < nr; ++i)
+        	pivot[i, perm[0,i]] = 1.0;
+    //return std::make_tuple(lower, upper, pivot);
+/*
 		int i = 0, j = 0, k = 0;
 		for (i = 0; i < nr; i++) {
 		  for (j = 0; j < nr; j++) {
@@ -343,7 +387,7 @@ Matrix[2] LU_Decomposition() pure const {
 		     }
 		  }
 		}
-
+*/
 		/*
 	    // Decomposing matrix into Upper and Lower
 	    // triangular matrix
@@ -383,6 +427,7 @@ Matrix[2] LU_Decomposition() pure const {
 
 	result[0] = lower;
 	result[1] = upper;
+	result[2] = pivot;
 	return result;
 }
 
@@ -417,7 +462,7 @@ Matrix Inv() pure const {
 }
 
 double Det_LU() pure const {
-	Matrix[2] LU = LU_Decomposition();
+	Matrix[3] LU = LU_Decomposition();
 	ulong nr = Size()[0];
 	double det = 1.0;
 	for(int i = 0; i< nr; ++i) {

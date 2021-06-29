@@ -107,7 +107,7 @@ void main() {
 		assert(30 == D.Det(D.Size()[0]));
 
 		D.LU_Decomposition();
-		Matrix[2] LU_D = D.LU_Decomposition();
+		Matrix[3] LU_D = D.LU_Decomposition();
 
 		writeln(toCSV(D));
 		writeln(toCSV(LU_D[0]));
@@ -153,7 +153,7 @@ void main() {
 		[[ 2.0, -1.0, -2.0],
 		[ -4.0,  6.0,  3.0],
 		[ -4.0, -2.0,  8.0]]);
-		Matrix[2] LU = Three.LU_Decomposition();
+		Matrix[3] LU = Three.LU_Decomposition();
 		writeln(toCSV(Three));
 		writeln(toCSV(LU[0]));
 		writeln(toCSV(LU[1]));	
