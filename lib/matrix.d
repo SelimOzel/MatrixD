@@ -309,7 +309,6 @@ Matrix T() pure const {
 // Lower upper triangle decomposition
 Matrix[3] LU_Decomposition() pure const {
 	import std.math: abs;
-	import std.numeric: CustomFloat;
 	Matrix[3] result;
 
 	ulong nr = Size()[0];
@@ -322,19 +321,19 @@ Matrix[3] LU_Decomposition() pure const {
 	if(nr == nc) {	
 
     	Matrix perm = new Matrix([0:nc]);     	
-    	Matrix input1 = this;
+    	double[MAXCOLUMNS][MAXROWS] input1 = _m;
 
 	    for (ulong j = 0; j < nr; ++j) {
 	        ulong max_index = j;
 	        double max_value = 0;
 	        for (ulong i = j; i < nr; ++i) {
-	            double value = abs(input1[perm[i], j]);
+	            double value = abs(input1[to!ulong(perm[0, i])][j]);
 	            if (value > max_value) {
 	                max_index = i;
 	                max_value = value;
 	            }
 	        }
-	        if (max_value <= epsilon)
+	        if (max_value <= float.epsilon)
 	            throw new Exception("matrix is singular");
 	        if (j != max_index) {
 	        	double dummy = perm[0,j];
@@ -344,18 +343,18 @@ Matrix[3] LU_Decomposition() pure const {
 	        ulong jj = perm[j];
 	        for (ulong i = j + 1; i < n; ++i) {
 	            ulong ii = perm[i];
-	            input1[ii, j] /= input1[jj, j];
+	            input1[ii][j] /= input1[jj][j];
 	            for (ulong k = j + 1; k < nr; ++k)
-	                input1(ii, k) -= input1[ii, j] * input1[jj, k];
+	                input1(ii, k) -= input1[ii][j] * input1[jj][k];
 	        }
 	    }
  
 	    for (ulong j = 0; j < nr; ++j) {
 	        lower[j, j] = 1;
 	        for (ulong i = j + 1; i < nr; ++i)
-	            lower[i, j] = input1[perm[0, i], j];
+	            lower[i, j] = input1[perm[0, i]][j];
 	        for (size_t i = 0; i <= j; ++i)
-	            upper[i, j] = input1[perm[0, i], j];
+	            upper[i, j] = input1[perm[0, i]][j];
 	    }
  
     	for (ulong i = 0; i < nr; ++i)
