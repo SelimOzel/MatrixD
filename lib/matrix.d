@@ -345,80 +345,20 @@ Matrix[3] LU_Decomposition() pure const {
 	            ulong ii = to!ulong(perm[0, i]);
 	            input1[ii][j] /= input1[jj][j];
 	            for (ulong k = j + 1; k < nr; ++k)
-	                input1(ii, k) -= input1[ii][j] * input1[jj][k];
+	                input1[ii][k] -= input1[ii][j] * input1[jj][k];
 	        }
 	    }
  
 	    for (ulong j = 0; j < nr; ++j) {
 	        lower[j, j] = 1;
 	        for (ulong i = j + 1; i < nr; ++i)
-	            lower[i, j] = input1[perm[0, i]][j];
+	            lower[i, j] = input1[to!ulong(perm[0, i])][j];
 	        for (size_t i = 0; i <= j; ++i)
-	            upper[i, j] = input1[perm[0, i]][j];
+	            upper[i, j] = input1[to!ulong(perm[0, i])][j];
 	    }
  
     	for (ulong i = 0; i < nr; ++i)
-        	pivot[i, perm[0,i]] = 1.0;
-    //return std::make_tuple(lower, upper, pivot);
-/*
-		int i = 0, j = 0, k = 0;
-		for (i = 0; i < nr; i++) {
-		  for (j = 0; j < nr; j++) {
-		     if (j < i)
-		     lower[j,i] = 0;
-		     else {
-		        lower[j,i] = _m[j][i];
-		        for (k = 0; k < i; k++) {
-		           lower[j,i] = lower[j,i] - lower[j,k] * upper[k,i];
-		        }
-		     }
-		  }
-		  for (j = 0; j < nr; j++) {
-		     if (j < i)
-		     upper[i,j] = 0;
-		     else if (j == i)
-		     upper[i,j] = 1;
-		     else {
-		        upper[i,j] = _m[i][j] / lower[i,i];
-		        for (k = 0; k < i; k++) {
-		           upper[i,j] = upper[i,j] - ((lower[i,k] * upper[k,j]) / lower[i,i]);
-		        }
-		     }
-		  }
-		}
-*/
-		/*
-	    // Decomposing matrix into Upper and Lower
-	    // triangular matrix
-	    for (ulong i = 0; i < nr; i++) {
-	        // Upper Triangular
-	        for (ulong k = i; k < nr; k++) {
-	            // Summation of L(i, j) * U(j, k)
-	            double sum = 0;
-	            for (ulong j = 0; j < i; j++)
-	                sum += (lower[i,j] * upper[j,k]);
-	 
-	            // Evaluating U(i, k)
-	            upper[i,k] = _m[i][k] - sum;
-	        }
-	 
-	        // Lower Triangular
-	        for (ulong k = i; k < nr; k++) {
-	            if (i == k)
-	                lower[i,i] = 1; // Diagonal as 1
-	            else {
-	                // Summation of L(k, j) * U(j, i)
-	                double sum = 0;
-	                for (ulong j = 0; j < i; j++)
-	                    sum += (lower[k,j] * upper[j,i]);
-	 
-	                // Evaluating L(k, i)
-	                lower[k,i]
-	                    = (_m[k][i] - sum) / upper[i,i];
-	            }
-	        }
-	    }
-	    */
+        	pivot[i, to!ulong(perm[0,i])] = 1.0;
 	}
 	else {
 		throw new Exception("LU Decomposition error: not square\n");
