@@ -149,15 +149,54 @@ void main() {
 		import std.conv: to;
 		import std.datetime.stopwatch: StopWatch, AutoStart;
 
-		Matrix Three = new Matrix(
+		writeln("LU Decomp-1");
+		Matrix lu_decomp_1 = new Matrix(
 		[[ 2.0, -1.0, -2.0],
 		[ -4.0,  6.0,  3.0],
 		[ -4.0, -2.0,  8.0]]);
-		Matrix[3] LU = Three.LU_Decomposition();
-		writeln(toCSV(Three));
-		writeln(toCSV(LU[0]));
-		writeln(toCSV(LU[1]));	
-		writeln(Three.Det_LU());	
+		Matrix[3] LU_1 = lu_decomp_1.LU_Decomposition();
+		writeln(toCSV(lu_decomp_1));
+		writeln(toCSV(LU_1[0]));
+		writeln(toCSV(LU_1[1]));	
+		writeln(toCSV(LU_1[2]));
+		writeln(lu_decomp_1.Det_LU());	
+
+		writeln("LU Decomp-2");
+		Matrix lu_decomp_2 = new Matrix(
+		[[ 1.0,  3.0,  5.0],
+		[  2.0,  4.0,  7.0],
+		[  1.0,  1.0,  0.0]]);
+		Matrix[3] LU_2 = lu_decomp_2.LU_Decomposition();
+		writeln(toCSV(lu_decomp_2));
+		writeln(toCSV(LU_2[0]));
+		writeln(toCSV(LU_2[1]));	
+		writeln(toCSV(LU_2[2]));
+		writeln(lu_decomp_2.Det_LU());		
+
+		writeln("LU Decomp-3");
+		Matrix lu_decomp_3 = new Matrix(
+		[[ 11.0,  9.0, 24.0,  2.0],
+		[   1.0,  5.0,  2.0,  6.0],
+		[   3.0, 17.0, 18.0,  1.0],
+		[   2.0,  5.0,  7.0,  1.0]]);
+		Matrix[3] LU_3 = lu_decomp_3.LU_Decomposition();
+		writeln(toCSV(lu_decomp_3));
+		writeln(toCSV(LU_3[0]));
+		writeln(toCSV(LU_3[1]));
+		writeln(toCSV(LU_3[2]));	
+		writeln(lu_decomp_3.Det_LU());	
+
+		writeln("LU Decomp-4");
+		Matrix lu_decomp_4 = new Matrix(
+		[[ -5.0, -6.0, -3.0],
+		[  -1.0,  0.0, -2.0],
+		[  -3.0, -4.0, -7.0]]);
+		Matrix[3] LU_4 = lu_decomp_4.LU_Decomposition();
+		writeln(toCSV(lu_decomp_4));
+		writeln(toCSV(LU_4[0]));
+		writeln(toCSV(LU_4[1]));	
+		writeln(toCSV(LU_4[2]));
+		writeln(lu_decomp_4.Det_LU());								
 
 		auto myStopWatch = StopWatch(AutoStart.no);
 		myStopWatch.start();
@@ -172,12 +211,13 @@ void main() {
 		[ 9.0, 2.0, 2.0, 2.0, 9.0, 2.0, 2.0, 4.0, 5.0, 4.0],
 		[ 6.0, 7.0, 2.0, 3.0, 9.0, 4.0, 2.0, 7.0, 7.0, 8.0],
 		[ 8.0, 0.0, 8.0, 8.0, 4.0, 0.0, 5.0, 7.0, 1.0, 0.0]]);
-		LU = Ten.LU_Decomposition();
+		Matrix[3] LU_Ten = Ten.LU_Decomposition();
 
 		writeln(toCSV(Ten));
-		writeln(toCSV(LU[0]));
-		writeln(toCSV(LU[1]));	
-		writeln(Ten.Det_LU());	
+		writeln(toCSV(LU_Ten[0]));
+		writeln(toCSV(LU_Ten[1]));	
+		writeln("Det - LU:"~to!string(Ten.Det_LU()));	
+		writeln("Det: "~to!string(Ten.Det(10)));	
 		//assert(0 < Ten.Det(Ten.Size()[0]));
 
 		myStopWatch.stop();
