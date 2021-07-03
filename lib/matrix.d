@@ -338,11 +338,11 @@ Matrix[3] LU_Decomposition() pure const {
 	        if (j != max_index) {
 	        	double dummy = perm[0,j];
 	        	perm[0, j] = perm[0, max_index];
-	        	perm[0, max_inde] = dummy;
+	        	perm[0, max_index] = dummy;
 	        }
-	        ulong jj = perm[j];
-	        for (ulong i = j + 1; i < n; ++i) {
-	            ulong ii = perm[i];
+	        ulong jj = to!ulong(perm[0, j]);
+	        for (ulong i = j + 1; i < nr; ++i) {
+	            ulong ii = to!ulong(perm[0, i]);
 	            input1[ii][j] /= input1[jj][j];
 	            for (ulong k = j + 1; k < nr; ++k)
 	                input1(ii, k) -= input1[ii][j] * input1[jj][k];
