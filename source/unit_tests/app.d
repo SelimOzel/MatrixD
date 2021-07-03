@@ -106,14 +106,15 @@ void main() {
 		[ 1.0, 0.0, 5.0,  0.0]]);   
 		assert(30 == D.Det(D.Size()[0]));
 
+		writeln("D Matrix Determinants");
 		D.LU_Decomposition();
 		Matrix[3] LU_D = D.LU_Decomposition();
 
 		writeln(toCSV(D));
 		writeln(toCSV(LU_D[0]));
 		writeln(toCSV(LU_D[1]));	
+		writeln(toCSV(LU_D[2]));
 
-		writeln("Determinants");
 		writeln(D.Det_LU());
 		writeln(D.Det(D.Size()[0]));
 		writeln(toCSV(D*D.Inv()));
@@ -217,12 +218,15 @@ void main() {
 		writeln(toCSV(LU_Ten[0]));
 		writeln(toCSV(LU_Ten[1]));	
 		writeln("Det - LU:"~to!string(Ten.Det_LU()));	
-		writeln("Det: "~to!string(Ten.Det(10)));	
+
+		Matrix Inv_10_by_10_result = Ten.Inv()*Ten;
+		writeln(Inv_10_by_10_result.toCSV);	
+		//writeln("Det: "~to!string(Ten.Det(10)));	
 		//assert(0 < Ten.Det(Ten.Size()[0]));
 
 		myStopWatch.stop();
 
-		writeln("10x10 Matrix determinant + constructor takes: "~to!string((to!double(myStopWatch.peek.total!"usecs")*0.000001))~" seconds");
+		writeln("10x10 Matrix constructor + determinant + inverse takes: "~to!string((to!double(myStopWatch.peek.total!"usecs")*0.000001))~" seconds");
 		myStopWatch.reset();		
 	}
 

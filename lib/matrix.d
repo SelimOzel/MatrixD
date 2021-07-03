@@ -404,10 +404,14 @@ double Det_LU() pure const {
 	Matrix[3] LU = LU_Decomposition();
 	ulong nr = Size()[0];
 	double det = 1.0;
+
+	Matrix P = LU[2];
+	double nswaps = to!double(P.Diag().Size()[0]) - P.Diag().Sum() - 1.0;
+
 	for(int i = 0; i< nr; ++i) {
 		det *= LU[1][i,i];
 	}
-	return det;
+	return det*-1^^nswaps;
 }
 
 // Obtained from geeks-for-geeks: https://www.geeksforgeeks.org/determinant-of-a-matrix/
@@ -466,6 +470,19 @@ double Sum(const ulong r) pure const {
 		throw new Exception(sum_row_err);
 	}
 }	
+
+// returns a matrix containing all diagonals
+Matrix Diag() pure const{
+	if(_nr != _nc) {
+		string diag_square_err = "Diag: not a square";
+		throw new Exception(diag_square_err);		
+	}
+	Matrix result = new Matrix(1, _nr, 0.0);
+	for(ulong i = 0; i<_nr; ++i){
+		result[0, i] = _m[i][i];
+	}
+	return result;
+}
 
 // [rows, cols]
 ulong[2] Size() pure const {
