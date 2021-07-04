@@ -199,7 +199,89 @@ void main() {
 		writeln(toCSV(LU_4[2]));
 		writeln(lu_decomp_4.Det_LU());								
 
+		// 5x5 matrix performance
 		auto myStopWatch = StopWatch(AutoStart.no);
+		myStopWatch.start();
+		Matrix Five = new Matrix(
+		[[ 1, 13,  3, 12, -1],   
+		[ 11,  2, -2,  4, 16],
+		[  2,  0,  3,  3, 15],
+		[ -5, -3,  5,  4, -3],
+		[ 13, 15,  7, -4,  5]]);
+		Matrix[3] LU_Five = Five.LU_Decomposition();
+
+		//writeln(toCSV(Five));
+		//writeln(toCSV(LU_Five[0]));
+		//writeln(toCSV(LU_Five[1]));	
+		//writeln("Det - LU:"~to!string(Five.Det_LU()));	
+
+		Matrix Inv_5_by_5_result = Five.Inv()*Five;
+		writeln(Inv_5_by_5_result.toCSV);	
+		//writeln("Det: "~to!string(Ten.Det(10)));	
+		//assert(0 < Ten.Det(Ten.Size()[0]));	
+
+		myStopWatch.stop();
+		writeln("5x5 Matrix constructor + determinant + inverse takes: "~to!string((to!double(myStopWatch.peek.total!"usecs")*0.000001))~" seconds");
+		myStopWatch.reset();
+
+		// 7x7 matrix performance
+		myStopWatch = StopWatch(AutoStart.no);
+		myStopWatch.start();
+		Matrix Seven = new Matrix(
+		[[ 12,  3,  8,  4, 1,  11,  3],   
+		[   9,  4, -7,  4, 5,  -4,  9],
+		[   1,  8,  5,  8, 0,  12, 13],
+		[   9,  0,  1,  6, 3, -11,  2],
+		[   0,  1,  2,  6, 2,   6,  0],
+		[  10, -2,  0,  9, 4,   6, 14],
+		[  28,  8,  3, 11, 7,  32, 15]]);
+		Matrix[3] LU_Seven = Seven.LU_Decomposition();
+
+		//writeln(toCSV(Seven));
+		//writeln(toCSV(LU_Seven[0]));
+		//writeln(toCSV(LU_Seven[1]));	
+		//writeln("Det - LU:"~to!string(Seven.Det_LU()));	
+
+		Matrix Inv_7_by_7_result = Seven.Inv()*Seven;
+		//writeln(Inv_7_by_7_result.toCSV);	
+		//writeln("Det: "~to!string(Ten.Det(10)));	
+		//assert(0 < Ten.Det(Ten.Size()[0]));	
+
+		myStopWatch.stop();
+		writeln("7x7 Matrix constructor + determinant + inverse takes: "~to!string((to!double(myStopWatch.peek.total!"usecs")*0.000001))~" seconds");
+		myStopWatch.reset();
+
+		// 9x9 matrix performance
+		myStopWatch = StopWatch(AutoStart.no);
+		myStopWatch.start();
+		Matrix Nine = new Matrix(
+		[[ 2,  1,  8,  -5,  5,  2,   4, -13, 11],   
+		[  6,  5,  6, -10,  7, 13,   3,  10,  9],
+		[  5, 16, 19,   0, 12,  4,   4,   4,  8],
+		[  4, 13,  0,  17,  2, 14,   1,   9,  7],
+		[  7, -5, 12,  16,  3,  5,   6,   2,  8],
+		[  6, 15, -3,   3,  9, -2, -12,   5,  2],
+		[  3,  2,  6,   2, 11,  2,   3,   4, -9],
+		[  8,  9, -7,   4, 13, 15,  18,  -8,  1],
+		[  1,  0,  3,  14, 19, 12,   2,  11,  3]]);
+		Matrix[3] LU_Nine = Nine.LU_Decomposition();
+
+		//writeln(toCSV(Seven));
+		//writeln(toCSV(LU_Seven[0]));
+		//writeln(toCSV(LU_Seven[1]));	
+		//writeln("Det - LU:"~to!string(Seven.Det_LU()));	
+
+		Matrix Inv_9_by_9_result = Nine.Inv()*Nine;
+		//writeln(Inv_7_by_7_result.toCSV);	
+		//writeln("Det: "~to!string(Ten.Det(10)));	
+		//assert(0 < Ten.Det(Ten.Size()[0]));	
+
+		myStopWatch.stop();
+		writeln("9x9 Matrix constructor + determinant + inverse takes: "~to!string((to!double(myStopWatch.peek.total!"usecs")*0.000001))~" seconds");
+		myStopWatch.reset();
+
+		// 10x10 matrix performance
+		myStopWatch = StopWatch(AutoStart.no);
 		myStopWatch.start();
 		Matrix Ten = new Matrix(
 		[[6.0, 6.0, 9.0, 5.0, 6.0, 4.0, 7.0, 4.0, 1.0, 2.0],   
@@ -214,20 +296,20 @@ void main() {
 		[ 8.0, 0.0, 8.0, 8.0, 4.0, 0.0, 5.0, 7.0, 1.0, 0.0]]);
 		Matrix[3] LU_Ten = Ten.LU_Decomposition();
 
-		writeln(toCSV(Ten));
-		writeln(toCSV(LU_Ten[0]));
-		writeln(toCSV(LU_Ten[1]));	
-		writeln("Det - LU:"~to!string(Ten.Det_LU()));	
+		//writeln(toCSV(Ten));
+		//writeln(toCSV(LU_Ten[0]));
+		//writeln(toCSV(LU_Ten[1]));	
+		//writeln("Det - LU:"~to!string(Ten.Det_LU()));	
 
 		Matrix Inv_10_by_10_result = Ten.Inv()*Ten;
-		writeln(Inv_10_by_10_result.toCSV);	
+		//writeln(Inv_10_by_10_result.toCSV);	
 		//writeln("Det: "~to!string(Ten.Det(10)));	
-		//assert(0 < Ten.Det(Ten.Size()[0]));
+		//assert(0 < Ten.Det(Ten.Size()[0]));	
 
 		myStopWatch.stop();
-
 		writeln("10x10 Matrix constructor + determinant + inverse takes: "~to!string((to!double(myStopWatch.peek.total!"usecs")*0.000001))~" seconds");
-		myStopWatch.reset();		
+		myStopWatch.reset();	
+
 	}
 
 	if(test_statistics) {
