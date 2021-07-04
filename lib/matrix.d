@@ -400,6 +400,44 @@ Matrix Inv() pure const {
 	}    
 }
 
+Matrix Inv_LU() pure const {
+	ulong nr = Size()[0];
+	ulong nc = Size()[1];
+
+	if(nr == nc) {	
+	    // Find determinant of A[][] 
+	    double determinant = Det_LU(); 
+	    if (determinant == 0) { 
+	        throw new Exception("Inverse error: determinant must be non-zero\n"); 
+	    } 
+		// decompose into lower, upper triangular and obtain pivot matrix
+		Matrix[3] LU = LU_Decomposition();	  
+
+		// identity columns
+	    Matrix e1 = new Matrix(3, 1, 0.0);
+	    e1[0,0] = 1.0;
+	    Matrix e2 = new Matrix(3, 1, 0.0);
+	    e1[1,0] = 1.0;
+	    Matrix e3 = new Matrix(3, 1, 0.0);
+	    e1[2,0] = 1.0;	    
+
+	    // x1, x2, x3 are columns of the inverse
+	    Matrix inverse = new Matrix(nr,nr,0.0);	    
+	    Matrix x1 = lup_solve(LU[0], LU[1], LU[2], e1);
+	    Matrix x2 = lup_solve(LU[0], LU[1], LU[2], e2);
+	    Matrix x3 = lup_solve(LU[0], LU[1], LU[2], e3);
+
+	    for(int i = 0; i<nr; ++i) {
+	    	
+	    }
+	  
+	    return inverse; 
+    }	
+	else {
+		throw new Exception("Inverse error: not square\n");
+	}    
+}
+
 double Det_LU() pure const {
 	Matrix[3] LU = LU_Decomposition();
 	ulong nr = Size()[0];
@@ -541,6 +579,59 @@ void cofactor(ref Matrix temp, ulong p, ulong q, ulong n) pure const {
             } 
         } 
     } 	
+}
+
+// x = forward_sub(L, b) is the solution to L x = b
+// L must be a lower-triangular matrix
+// b must be a vector of the same leading dimension as L
+Matrix forward_sub(Matrix L, Matrix b) pure const {
+    ulong nr = L.Size()[0];
+    Matrix x = new Matrix(nr, 1, 0.0);
+    for (ulong i = 0; i<nr; ++i) {
+        double tmp = b[i,0];
+        for (ulong j = 0; j<i-1; ++j){
+            tmp -= L[i,j] * x[j,0];
+        }
+        x[i,0] = tmp / L[i,i];
+    }
+    return x;
+}
+
+// x = back_sub(U, b) is the solution to U x = b
+// U must be an upper-triangular matrix
+// b must be a vector of the same leading dimension as U
+Matrix back_sub(Matrix U, Matrix b) pure const {
+    ulong nr = U.Size()[0];
+    Matrix x = new Matrix(nr, 1, 0.0);
+    for (ulong i = nr-1; i>-1; --i) {
+        double tmp = b[i,0];
+        for (ulong j = i+1; j<nr; ++j){
+            tmp -= U[i,j] * x[j,0];
+    	}
+        x[i,0] = tmp / U[i,i];
+    }
+    return x;    
+}
+
+// x = lu_solve(L, U, b) is the solution to L U x = b
+// L must be a lower-triangular matrix
+// U must be an upper-triangular matrix of the same size as L
+// b must be a vector of the same leading dimension as L
+Matrix lu_solve(Matrix L, Matrix U, Matrix b) {	
+    Matrix y = forward_sub(L, b);
+    Matrix x = back_sub(U, y);
+    return x;
+}
+
+// x = lup_solve(L, U, P, b) is the solution to L U x = P b
+// L must be a lower-triangular matrix
+// U must be an upper-triangular matrix of the same shape as L
+// P must be a permutation matrix of the same shape as L
+// b must be a vector of the same leading dimension as L
+Matrix lup_solve(Matrix L, Matrix U, Matrix P, Matrix b) {
+    Matrix z = P*b;
+    Matrix x = lu_solve(L, U, z);
+    return x;
 }
 
 // Obtained from geeks-for-geeks: https://www.geeksforgeeks.org/adjoint-inverse-matrix/

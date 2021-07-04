@@ -301,13 +301,13 @@ void main() {
 		//writeln(toCSV(LU_Ten[1]));	
 		//writeln("Det - LU:"~to!string(Ten.Det_LU()));	
 
-		Matrix Inv_10_by_10_result = Ten.Inv()*Ten;
+		//Matrix Inv_10_by_10_result = Ten.Inv()*Ten;
 		//writeln(Inv_10_by_10_result.toCSV);	
 		//writeln("Det: "~to!string(Ten.Det(10)));	
 		//assert(0 < Ten.Det(Ten.Size()[0]));	
 
 		myStopWatch.stop();
-		writeln("10x10 Matrix constructor + determinant + inverse takes: "~to!string((to!double(myStopWatch.peek.total!"usecs")*0.000001))~" seconds");
+		//writeln("10x10 Matrix constructor + determinant + inverse takes: "~to!string((to!double(myStopWatch.peek.total!"usecs")*0.000001))~" seconds");
 		myStopWatch.reset();	
 
 	}
