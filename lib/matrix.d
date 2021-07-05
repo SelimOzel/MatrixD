@@ -414,24 +414,18 @@ Matrix Inv_LU() pure const {
 		Matrix[3] LU = LU_Decomposition();	  
 
 		// identity columns
-	    Matrix e1 = new Matrix(3, 1, 0.0);
-	    e1[0,0] = 1.0;
-	    Matrix e2 = new Matrix(3, 1, 0.0);
-	    e1[1,0] = 1.0;
-	    Matrix e3 = new Matrix(3, 1, 0.0);
-	    e1[2,0] = 1.0;	    
+		Matrix e = Identity(nr); 
 
-	    // x1, x2, x3 are columns of the inverse
+	    // x are columns of the inverse
 	    Matrix inverse = new Matrix(nr,nr,0.0);	    
-	    Matrix x1 = lup_solve(LU[0], LU[1], LU[2], e1);
-	    Matrix x2 = lup_solve(LU[0], LU[1], LU[2], e2);
-	    Matrix x3 = lup_solve(LU[0], LU[1], LU[2], e3);
-
-	    for(int i = 0; i<nr; ++i) {
-	    	
+	    Matrix x;
+	    for (ulong i = 0; i<nr; ++i) {
+		    x = lup_solve(LU[0], LU[1], LU[2], e[i].T());
+		    for(ulong j = 0; j<nr; ++j) {
+		    	inverse[i,j] = x[0,j];
+		    }
 	    }
-	  
-	    return inverse; 
+	    return inverse;
     }	
 	else {
 		throw new Exception("Inverse error: not square\n");
@@ -510,7 +504,7 @@ double Sum(const ulong r) pure const {
 }	
 
 // returns a matrix containing all diagonals
-Matrix Diag() pure const{
+Matrix Diag() pure const {
 	if(_nr != _nc) {
 		string diag_square_err = "Diag: not a square";
 		throw new Exception(diag_square_err);		
@@ -518,6 +512,15 @@ Matrix Diag() pure const{
 	Matrix result = new Matrix(1, _nr, 0.0);
 	for(ulong i = 0; i<_nr; ++i){
 		result[0, i] = _m[i][i];
+	}
+	return result;
+}
+
+// create nxn identity
+Matrix Identity(ulong n) pure const {
+	Matrix result = new Matrix(n, n, 0.0);
+	for(ulong i = 0; i<n; ++i) {
+		result[i,i] = 1.0;
 	}
 	return result;
 }
@@ -617,7 +620,7 @@ Matrix back_sub(Matrix U, Matrix b) pure const {
 // L must be a lower-triangular matrix
 // U must be an upper-triangular matrix of the same size as L
 // b must be a vector of the same leading dimension as L
-Matrix lu_solve(Matrix L, Matrix U, Matrix b) {	
+Matrix lu_solve(Matrix L, Matrix U, Matrix b) pure const {	
     Matrix y = forward_sub(L, b);
     Matrix x = back_sub(U, y);
     return x;
@@ -628,7 +631,7 @@ Matrix lu_solve(Matrix L, Matrix U, Matrix b) {
 // U must be an upper-triangular matrix of the same shape as L
 // P must be a permutation matrix of the same shape as L
 // b must be a vector of the same leading dimension as L
-Matrix lup_solve(Matrix L, Matrix U, Matrix P, Matrix b) {
+Matrix lup_solve(Matrix L, Matrix U, Matrix P, Matrix b) pure const {
     Matrix z = P*b;
     Matrix x = lu_solve(L, U, z);
     return x;

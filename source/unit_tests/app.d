@@ -215,7 +215,8 @@ void main() {
 		//writeln(toCSV(LU_Five[1]));	
 		//writeln("Det - LU:"~to!string(Five.Det_LU()));	
 
-		Matrix Inv_5_by_5_result = Five.Inv()*Five;
+		//Matrix Inv_5_by_5_result = Five.Inv()*Five;
+		Matrix Inv_5_by_5_result = Five.Inv_LU()*Five;
 		writeln(Inv_5_by_5_result.toCSV);	
 		//writeln("Det: "~to!string(Ten.Det(10)));	
 		//assert(0 < Ten.Det(Ten.Size()[0]));	
@@ -242,7 +243,8 @@ void main() {
 		//writeln(toCSV(LU_Seven[1]));	
 		//writeln("Det - LU:"~to!string(Seven.Det_LU()));	
 
-		Matrix Inv_7_by_7_result = Seven.Inv()*Seven;
+		//Matrix Inv_7_by_7_result = Seven.Inv()*Seven;
+		Matrix Inv_7_by_7_result = Seven.Inv_LU()*Seven;
 		//writeln(Inv_7_by_7_result.toCSV);	
 		//writeln("Det: "~to!string(Ten.Det(10)));	
 		//assert(0 < Ten.Det(Ten.Size()[0]));	
@@ -271,7 +273,8 @@ void main() {
 		//writeln(toCSV(LU_Seven[1]));	
 		//writeln("Det - LU:"~to!string(Seven.Det_LU()));	
 
-		Matrix Inv_9_by_9_result = Nine.Inv()*Nine;
+		//Matrix Inv_9_by_9_result = Nine.Inv()*Nine;
+		Matrix Inv_9_by_9_result = Nine.Inv_LU()*Nine;
 		//writeln(Inv_7_by_7_result.toCSV);	
 		//writeln("Det: "~to!string(Ten.Det(10)));	
 		//assert(0 < Ten.Det(Ten.Size()[0]));	
