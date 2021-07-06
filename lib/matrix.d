@@ -12,8 +12,8 @@ enum uint MAXCOLUMNS = 1001;
 // Output is csv
 string toCSV(const Matrix matrix_IN) {
 	string result;
-	for(ulong r = 0; r < matrix_IN._nr; ++r) {
-		for(ulong c = 0; c < matrix_IN._nc; ++c) {
+	for(int r = 0; r < matrix_IN._nr; ++r) {
+		for(int c = 0; c < matrix_IN._nc; ++c) {
 			result ~= to!string(matrix_IN._m[r][c]);
 			if(c == matrix_IN._nc - 1) result ~= "\n";
 			else result ~= ",";
@@ -25,7 +25,7 @@ string toCSV(const Matrix matrix_IN) {
 // vector output as double
 double[] toDouble_v(const Matrix matrix_IN) {
 	double[] matrix_double;
-	for(ulong c = 0; c < matrix_IN._nc; ++c) {
+	for(int c = 0; c < matrix_IN._nc; ++c) {
 		matrix_double ~= matrix_IN._m[0][c];
 	}	
 	return matrix_double;
@@ -34,9 +34,9 @@ double[] toDouble_v(const Matrix matrix_IN) {
 // matrix output as double
 double[][] toDouble_m(const Matrix matrix_IN) {
 	double[][] matrix_double;
-	for(ulong r = 0; r < matrix_IN._nr; ++r) {
+	for(int r = 0; r < matrix_IN._nr; ++r) {
 		matrix_double ~= [[matrix_IN._m[r][0]]];
-		for(ulong c = 1; c < matrix_IN._nc; ++c) {
+		for(int c = 1; c < matrix_IN._nc; ++c) {
 			matrix_double[r] ~= matrix_IN._m[r][c];
 		}
 	}	
@@ -46,8 +46,8 @@ double[][] toDouble_m(const Matrix matrix_IN) {
 // for each element in the matrix
 Matrix sin(const Matrix matrix_IN) pure {
 	Matrix sin_matrix = new Matrix(matrix_IN.Size()[0], matrix_IN.Size()[1], 0.0);
-	for(ulong r = 0; r < matrix_IN._nr; ++r) {
-		for(ulong c = 0; c < matrix_IN._nc; ++c) {
+	for(int r = 0; r < matrix_IN._nr; ++r) {
+		for(int c = 0; c < matrix_IN._nc; ++c) {
 			sin_matrix[r,c] = sin(matrix_IN._m[r][c]);
 		}
 	}
@@ -57,8 +57,8 @@ Matrix sin(const Matrix matrix_IN) pure {
 // add random noise to each element
 Matrix noise(const Matrix matrix_IN, double mean, double var) {
 	Matrix noise_matrix = new Matrix(matrix_IN.Size()[0], matrix_IN.Size()[1], 0.0);
-	for(ulong r = 0; r < matrix_IN._nr; ++r) {
-		for(ulong c = 0; c < matrix_IN._nc; ++c) {
+	for(int r = 0; r < matrix_IN._nr; ++r) {
+		for(int c = 0; c < matrix_IN._nc; ++c) {
 			noise_matrix[r,c] = mean + var*2.0*(dice(0.5, 0.5)-0.5);
 		}
 	}
@@ -73,8 +73,8 @@ this() {
 
 // nxm filled with n
 this(
-	const ulong rowLength_IN, 
-	const ulong columnLength_IN, 
+	const int rowLength_IN, 
+	const int columnLength_IN, 
 	const double n) 
 pure {
 	initialize(rowLength_IN, columnLength_IN, n);
@@ -83,8 +83,8 @@ pure {
 // A = double[][]
 this(const double[][] matrixRHS_IN) pure {
 	initialize(matrixRHS_IN.length, matrixRHS_IN[0].length, 0.0);
-	for(ulong r = 0; r < _nr; ++r) {
-		for(ulong c = 0; c < _nc; ++c) {
+	for(int r = 0; r < _nr; ++r) {
+		for(int c = 0; c < _nc; ++c) {
 			_m[r][c] = matrixRHS_IN[r][c];
 		}
 	}   	
@@ -93,20 +93,20 @@ this(const double[][] matrixRHS_IN) pure {
 // A = double[]
 this(const double[] rowvectorRHS_IN) pure {
 	initialize(1, rowvectorRHS_IN.length, 0.0);
-	for(ulong r = 0; r < _nr; ++r) {
-		for(ulong c = 0; c < _nc; ++c) {
+	for(int r = 0; r < _nr; ++r) {
+		for(int c = 0; c < _nc; ++c) {
 			_m[r][c] = rowvectorRHS_IN[c];
 		}
 	}   	
 }
 
 // A = [1:10]
-this(const ulong[ulong] x) pure {
+this(const int[int] x) pure {
 	if(x.length == 1) {
 		foreach(val; x.keys) {
 			initialize(1, x[val]-val+1, 0.0);
-			for(ulong r = 0; r < _nr; ++r) {
-				for(ulong c = 0; c < _nc; ++c) {
+			for(int r = 0; r < _nr; ++r) {
+				for(int c = 0; c < _nc; ++c) {
 					_m[r][c] = c+val;
 				}
 			}   			
@@ -120,8 +120,8 @@ this(const ulong[ulong] x) pure {
 // A = [[x1, x2 ...], [y1, y2, ...]]
 void opAssign(const double[][] matrixRHS_IN) pure {
 	initialize(matrixRHS_IN.length, matrixRHS_IN[0].length, 0.0);
-	for(ulong r = 0; r < _nr; ++r) {
-		for(ulong c = 0; c < _nc; ++c) {
+	for(int r = 0; r < _nr; ++r) {
+		for(int c = 0; c < _nc; ++c) {
 			_m[r][c] = matrixRHS_IN[r][c];
 		}
 	}    	
@@ -180,12 +180,12 @@ Matrix opBinary(string operation_IN)(const Matrix rhs_IN) pure const {
 	bool sum = operation_IN == "+";
 	bool subtract = operation_IN == "-";
 	bool multiply = operation_IN == "*";
-	ulong rhs_nr = rhs_IN._nr;
-	ulong rhs_nc = rhs_IN._nc;
+	int rhs_nr = rhs_IN._nr;
+	int rhs_nc = rhs_IN._nc;
 	if(sum || subtract){
 		if(rhs_nr == _nr && rhs_nc == _nc) {
-			for(ulong r = 0; r < _nr; ++r) {
-				for(ulong c = 0; c < _nc; ++c) {
+			for(int r = 0; r < _nr; ++r) {
+				for(int c = 0; c < _nc; ++c) {
 					double rhs = rhs_IN._m[r][c];
 					if(sum) {
 						result._m[r][c] = _m[r][c] + rhs;
@@ -205,9 +205,9 @@ Matrix opBinary(string operation_IN)(const Matrix rhs_IN) pure const {
 		// Verify mXn * nXp condition
 		if(_nc == rhs_nr) {
 			result = new Matrix(_nr, rhs_nc, 0.0); // reshape to mXp
-			for (ulong r = 0; r<_nr; r++) {
-				for (ulong c = 0; c<rhs_nc; c++) {
-					for (ulong k = 0; k<_nc; k++) {
+			for (int r = 0; r<_nr; r++) {
+				for (int c = 0; c<rhs_nc; c++) {
+					for (int k = 0; k<_nc; k++) {
 						result._m[r][c] += _m[r][k] * rhs_IN._m[k][c];
 					}
 				}
@@ -228,29 +228,29 @@ Matrix opBinary(string operation_IN)(const Matrix rhs_IN) pure const {
 Matrix opBinary(string operation_IN)(const double rhs_IN) pure const {
 	Matrix result = new Matrix(_nr, _nc, 0.0);
 	if(operation_IN == "+"){	
-		for(ulong r = 0; r < _nr; r++) {
-			for(ulong c = 0; c < _nc; c++) {
+		for(int r = 0; r < _nr; r++) {
+			for(int c = 0; c < _nc; c++) {
 				result._m[r][c] = _m[r][c] + rhs_IN;
 			}
 		}
 	}
 	else if(operation_IN == "-"){	
-		for(ulong r = 0; r < _nr; r++) {
-			for(ulong c = 0; c < _nc; c++) {
+		for(int r = 0; r < _nr; r++) {
+			for(int c = 0; c < _nc; c++) {
 				result._m[r][c] = _m[r][c] - rhs_IN;
 			}
 		}
 	}   
 	else if(operation_IN == "*"){	
-		for(ulong r = 0; r < _nr; r++) {
-			for(ulong c = 0; c < _nc; c++) {
+		for(int r = 0; r < _nr; r++) {
+			for(int c = 0; c < _nc; c++) {
 				result._m[r][c] = _m[r][c] * rhs_IN;
 			}
 		}
 	} 
 	else if(operation_IN == "/"){	
-		for(ulong r = 0; r < _nr; r++) {
-			for(ulong c = 0; c < _nc; c++) {
+		for(int r = 0; r < _nr; r++) {
+			for(int c = 0; c < _nc; c++) {
 				result._m[r][c] = _m[r][c] / rhs_IN;
 			}
 		}
@@ -262,8 +262,8 @@ Matrix opBinary(string operation_IN)(const double rhs_IN) pure const {
 override bool opEquals(Object o) pure const {
 	auto rhs = cast(const Matrix)o;
 	if(rhs.Size()[0] == Size()[0] && rhs.Size[1] == Size[1]){
-		for(ulong r = 0; r<rhs._nr; ++r) {
-			for(ulong c = 0; c<rhs._nc; ++c) {
+		for(int r = 0; r<rhs._nr; ++r) {
+			for(int c = 0; c<rhs._nc; ++c) {
 				if(rhs[r,c] != _m[r][c]) return false;
 			}
 		}
@@ -273,12 +273,12 @@ override bool opEquals(Object o) pure const {
 }
 
 // A[1,2] = x
-void opIndexAssign(double val, ulong r, ulong c) pure {
+void opIndexAssign(double val, int r, int c) pure {
 	_m[r][c] = val;
 }
 
 // x = A[1,2]
-double opIndex(ulong r, ulong c) pure const {
+double opIndex(int r, int c) pure const {
 	if(r >= _nr) {
 		string row_err = "opIndex[][]: row length error";
 		throw new Exception(row_err);
@@ -291,7 +291,7 @@ double opIndex(ulong r, ulong c) pure const {
 }
 
 // [x1, x2, ...] = A[1]
-Matrix opIndex(ulong r) pure const {
+Matrix opIndex(int r) pure const {
 	if(r >= _nr) {
 		string row_err = "opIndex[]: row length error";
 		throw new Exception(row_err);
@@ -299,7 +299,7 @@ Matrix opIndex(ulong r) pure const {
 	Matrix row_vector;
 	if(r < _nr) {
 		row_vector = new Matrix(1, _nc, 0.0);
-		for (ulong c = 0; c<_nc; ++c) {
+		for (int c = 0; c<_nc; ++c) {
 			row_vector[0, c] = _m[r][c];
 		}
 	}
@@ -310,8 +310,8 @@ Matrix opIndex(ulong r) pure const {
 // Transpose
 Matrix T() pure const {
 	Matrix transpose = new Matrix(_nc, _nr, 0.0);
-	for (ulong r=0; r<transpose.Size()[0]; r++) {
-		for (ulong c=0; c<transpose.Size()[1]; c++) {
+	for (int r=0; r<transpose.Size()[0]; r++) {
+		for (int c=0; c<transpose.Size()[1]; c++) {
 			transpose._m[r][c] = _m[c][r];
 		}
 	}
@@ -323,8 +323,8 @@ Matrix[3] LU_Decomposition() pure const {
 	import std.math: abs;
 	Matrix[3] result;
 
-	ulong nr = Size()[0];
-	ulong nc = Size()[1];
+	int nr = Size()[0];
+	int nc = Size()[1];
 
 	Matrix lower = new Matrix(nr, nc, 0.0);
 	Matrix upper = new Matrix(nr, nc, 0.0);
@@ -335,11 +335,11 @@ Matrix[3] LU_Decomposition() pure const {
     	Matrix perm = new Matrix([0:nc]);     	
     	double[MAXCOLUMNS][MAXROWS] input1 = _m;
 
-	    for (ulong j = 0; j < nr; ++j) {
-	        ulong max_index = j;
+	    for (int j = 0; j < nr; ++j) {
+	        int max_index = j;
 	        double max_value = 0;
-	        for (ulong i = j; i < nr; ++i) {
-	            double value = abs(input1[to!ulong(perm[0, i])][j]);
+	        for (int i = j; i < nr; ++i) {
+	            double value = abs(input1[to!int(perm[0, i])][j]);
 	            if (value > max_value) {
 	                max_index = i;
 	                max_value = value;
@@ -352,25 +352,25 @@ Matrix[3] LU_Decomposition() pure const {
 	        	perm[0, j] = perm[0, max_index];
 	        	perm[0, max_index] = dummy;
 	        }
-	        ulong jj = to!ulong(perm[0, j]);
-	        for (ulong i = j + 1; i < nr; ++i) {
-	            ulong ii = to!ulong(perm[0, i]);
+	        int jj = to!int(perm[0, j]);
+	        for (int i = j + 1; i < nr; ++i) {
+	            int ii = to!int(perm[0, i]);
 	            input1[ii][j] /= input1[jj][j];
-	            for (ulong k = j + 1; k < nr; ++k)
+	            for (int k = j + 1; k < nr; ++k)
 	                input1[ii][k] -= input1[ii][j] * input1[jj][k];
 	        }
 	    }
  
-	    for (ulong j = 0; j < nr; ++j) {
+	    for (int j = 0; j < nr; ++j) {
 	        lower[j, j] = 1;
-	        for (ulong i = j + 1; i < nr; ++i)
-	            lower[i, j] = input1[to!ulong(perm[0, i])][j];
+	        for (int i = j + 1; i < nr; ++i)
+	            lower[i, j] = input1[to!int(perm[0, i])][j];
 	        for (size_t i = 0; i <= j; ++i)
-	            upper[i, j] = input1[to!ulong(perm[0, i])][j];
+	            upper[i, j] = input1[to!int(perm[0, i])][j];
 	    }
  
-    	for (ulong i = 0; i < nr; ++i)
-        	pivot[i, to!ulong(perm[0,i])] = 1.0;
+    	for (int i = 0; i < nr; ++i)
+        	pivot[i, to!int(perm[0,i])] = 1.0;
 	}
 	else {
 		throw new Exception("LU Decomposition error: not square\n");
@@ -383,8 +383,8 @@ Matrix[3] LU_Decomposition() pure const {
 }
 
 Matrix Inv() pure const {
-	ulong nr = Size()[0];
-	ulong nc = Size()[1];
+	int nr = Size()[0];
+	int nc = Size()[1];
 
 	if(nr == nc) {	
 	    // Find determinant of A[][] 
@@ -401,8 +401,8 @@ Matrix Inv() pure const {
 	    adjoint(adj); 
 
 	    // Find Inverse using formula "inverse(A) = adj(A)/det(A)" 
-	    for (ulong i=0; i<nr; i++) 
-	        for (ulong j=0; j<nr; j++) 
+	    for (int i=0; i<nr; i++) 
+	        for (int j=0; j<nr; j++) 
 	        	inverse[i,j] = adj[i,j]/determinant;
 	  
 	    return inverse; 
@@ -413,8 +413,8 @@ Matrix Inv() pure const {
 }
 
 Matrix Inv_LU() {
-	ulong nr = Size()[0];
-	ulong nc = Size()[1];
+	int nr = Size()[0];
+	int nc = Size()[1];
 
 	if(nr == nc) {	
 	    // Find determinant of A[][] 
@@ -431,9 +431,9 @@ Matrix Inv_LU() {
 	    // x are columns of the inverse
 	    Matrix inverse = new Matrix(nr,nr,0.0);	    
 	    Matrix x;
-	    for (ulong i = 0; i<nr; ++i) {
+	    for (int i = 0; i<nr; ++i) {
 		    x = lup_solve(LU[0], LU[1], LU[2], e[i].T());
-		    for(ulong j = 0; j<nr; ++j) {
+		    for(int j = 0; j<nr; ++j) {
 		    	inverse[i,j] = x[0,j];
 		    }
 	    }
@@ -446,7 +446,7 @@ Matrix Inv_LU() {
 
 double Det_LU() pure const {
 	Matrix[3] LU = LU_Decomposition();
-	ulong nr = Size()[0];
+	int nr = Size()[0];
 	double det = 1.0;
 
 	Matrix P = LU[2];
@@ -459,9 +459,9 @@ double Det_LU() pure const {
 }
 
 // Obtained from geeks-for-geeks: https://www.geeksforgeeks.org/determinant-of-a-matrix/
-double Det(ulong n) pure const {
-	ulong nr = Size()[0];
-	ulong nc = Size()[1];
+double Det(int n) pure const {
+	int nr = Size()[0];
+	int nc = Size()[1];
 
 	if(nr == nc) {
 		//  Base case : if matrix contains single element 
@@ -474,7 +474,7 @@ double Det(ulong n) pure const {
 		int sign = 1;  // To store sign multiplier 
 
 		// Iterate for each element of first row 
-		for (ulong f = 0; f < n; f++) {
+		for (int f = 0; f < n; f++) {
 			// Getting Cofactor of mat[0][f] 
 			cofactor(temp, 0, f, n); 
 			D += sign * _m[0][f] * temp.Det(n - 1); 
@@ -492,8 +492,8 @@ double Det(ulong n) pure const {
 // Sums all elements
 double Sum() pure const {
 	double all_sum = 0.0;
-	for(ulong r = 0; r < _nr; r++) {
-		for(ulong c = 0; c < _nc; c++) {
+	for(int r = 0; r < _nr; r++) {
+		for(int c = 0; c < _nc; c++) {
 			all_sum += _m[r][c];
 		}
 	}
@@ -501,10 +501,10 @@ double Sum() pure const {
 }    
 
 // Sums all elements in row r.
-double Sum(const ulong r) pure const {
+double Sum(const int r) pure const {
 	if(r < _nr) {
 		double row_sum = 0.0;
-		for(ulong c = 0; c < _nc; c++) {
+		for(int c = 0; c < _nc; c++) {
 			row_sum += _m[r][c];
 		}
 		return row_sum;	
@@ -522,23 +522,23 @@ Matrix Diag() pure const {
 		throw new Exception(diag_square_err);		
 	}
 	Matrix result = new Matrix(1, _nr, 0.0);
-	for(ulong i = 0; i<_nr; ++i){
+	for(int i = 0; i<_nr; ++i){
 		result[0, i] = _m[i][i];
 	}
 	return result;
 }
 
 // create nxn identity
-Matrix Identity(ulong n) pure const {
+Matrix Identity(int n) pure const {
 	Matrix result = new Matrix(n, n, 0.0);
-	for(ulong i = 0; i<n; ++i) {
+	for(int i = 0; i<n; ++i) {
 		result[i,i] = 1.0;
 	}
 	return result;
 }
 
 // [rows, cols]
-ulong[2] Size() pure const {
+int[2] Size() pure const {
 	return [_nr, _nc];
 }    
 
@@ -550,8 +550,8 @@ bool empty() pure const {
 
 private:
 void initialize(
-	const ulong r_IN, 
-	const ulong c_IN, 
+	const int r_IN, 
+	const int c_IN, 
 	const double n_IN) 
 pure {
 	string initialize_err_maxrow = "initialize: Increase MAXROWS.";
@@ -559,8 +559,8 @@ pure {
 	if(r_IN > MAXROWS) throw new Exception(initialize_err_maxrow);
 	if(c_IN > MAXCOLUMNS) throw new Exception(initialize_err_maxcolumn);
 	if(r_IN != 0 && c_IN != 0) {
-		for(ulong r = 0; r<r_IN; ++r) {
-			for(ulong c = 0; c<c_IN; ++c) {
+		for(int r = 0; r<r_IN; ++r) {
+			for(int c = 0; c<c_IN; ++c) {
 				_m[r][c] = n_IN;
 			}
 		}
@@ -573,12 +573,12 @@ pure {
 }
 
 // Obtained from geeks-for-geeks: https://www.geeksforgeeks.org/determinant-of-a-matrix/
-void cofactor(ref Matrix temp, ulong p, ulong q, ulong n) pure const {
-    ulong i = 0, j = 0; 
+void cofactor(ref Matrix temp, int p, int q, int n) pure const {
+    int i = 0, j = 0; 
   
     // Looping for each element of the matrix 
-    for (ulong row = 0; row < n; row++) { 
-        for (ulong col = 0; col < n; col++) { 
+    for (int row = 0; row < n; row++) { 
+        for (int col = 0; col < n; col++) { 
             //  Copying into temporary matrix only those element 
             //  which are not in given row and column 
             if (row != p && col != q) { 
@@ -600,11 +600,11 @@ void cofactor(ref Matrix temp, ulong p, ulong q, ulong n) pure const {
 // L must be a lower-triangular matrix
 // b must be a vector of the same leading dimension as L
 Matrix forward_sub(Matrix L, Matrix b) {
-    ulong nr = L.Size()[0];
+    int nr = L.Size()[0];
     Matrix x = new Matrix(nr, 1, 0.0);
-    for (ulong i = 0; i<nr; ++i) {
+    for (int i = 0; i<nr; ++i) {
         double tmp = b[i,0];
-        for (ulong j = 0; j<i-1; ++j){
+        for (int j = 0; j<i-1; ++j){
         	import std.stdio: writeln;
         	writeln(i);
             tmp -= L[i,j] * x[j,0];
@@ -618,11 +618,11 @@ Matrix forward_sub(Matrix L, Matrix b) {
 // U must be an upper-triangular matrix
 // b must be a vector of the same leading dimension as U
 Matrix back_sub(Matrix U, Matrix b) pure const {
-    ulong nr = U.Size()[0];
+    int nr = U.Size()[0];
     Matrix x = new Matrix(nr, 1, 0.0);
-    for (ulong i = nr-1; i>-1; --i) {
+    for (int i = nr-1; i>-1; --i) {
         double tmp = b[i,0];
-        for (ulong j = i+1; j<nr; ++j){
+        for (int j = i+1; j<nr; ++j){
             tmp -= U[i,j] * x[j,0];
     	}
         x[i,0] = tmp / U[i,i];
@@ -654,7 +654,7 @@ Matrix lup_solve(Matrix L, Matrix U, Matrix P, Matrix b) {
 // Obtained from geeks-for-geeks: https://www.geeksforgeeks.org/adjoint-inverse-matrix/
 void adjoint(ref Matrix adj) pure const
 { 
-	ulong N = _nr;
+	int N = _nr;
     if (N == 1) { 
         adj[0,0] = 1.0; 
         return; 
@@ -665,8 +665,8 @@ void adjoint(ref Matrix adj) pure const
     //std::vector<std::vector<double>> temp(N, std::vector<double>(N)); // To store cofactors 
   	Matrix temp = new Matrix(N, N, 0.0);
 
-    for (ulong i=0; i<N; i++) { 
-        for (ulong j=0; j<N; j++) { 
+    for (int i=0; i<N; i++) { 
+        for (int j=0; j<N; j++) { 
             // Get cofactor of A[i][j] 
             cofactor(temp, i, j, N); 
 
@@ -681,7 +681,7 @@ void adjoint(ref Matrix adj) pure const
     } 
 } 
 
-ulong _nr = 0;
-ulong _nc = 0;
+int _nr = 0;
+int _nc = 0;
 double[MAXCOLUMNS][MAXROWS] _m;
 }

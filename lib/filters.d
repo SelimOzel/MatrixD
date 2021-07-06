@@ -8,13 +8,13 @@ import std.stdio;
 // MatrixD
 import matrixd.matrix: Matrix, toDouble_v;
 
-void add_index_range(ref ulong[] indices, ulong beg, ulong end, ulong inc = 1) {
-    for (ulong i = beg; i <= end; i += inc) {
+void add_index_range(ref int[] indices, int beg, int end, int inc = 1) {
+    for (int i = beg; i <= end; i += inc) {
        indices ~= (i);
     }
 }
 
-void add_index_const(ref ulong[] indices, ulong value, ulong numel) {
+void add_index_const(ref int[] indices, int value, int numel) {
     while (numel--) {
         indices ~= value;
     }
@@ -24,9 +24,9 @@ void append_vector(ref double[] vec, ref double[] tail) {
     vec ~= tail;
 }
 
-double[] subvector_reverse(const ref Matrix vec, ulong idx_end, ulong idx_start) {
+double[] subvector_reverse(const ref Matrix vec, int idx_end, int idx_start) {
 	double[] result;
-	for(ulong i = idx_start; i<idx_end+1; ++i) {
+	for(int i = idx_start; i<idx_end+1; ++i) {
 		result ~= vec[0, i];
 	}
     return result.reverse;
@@ -43,7 +43,7 @@ Matrix filter(Matrix B, Matrix A, const Matrix X, const Matrix Zi) pure {
 		throw new Exception("The feedback filter coefficients is not a row vector.");
 	}
 	bool all_zeros = true;
-	for(ulong c = 0; c<A.Size()[1]; ++c) {
+	for(int c = 0; c<A.Size()[1]; ++c) {
 		if(A[0,c] != 0.0) {
 			all_zeros = false;
 			continue;
@@ -59,20 +59,20 @@ Matrix filter(Matrix B, Matrix A, const Matrix X, const Matrix Zi) pure {
 
 	double a0 = A[0,0];
 	if(a0 != 1.0) {
-		for(ulong i = 0; i< A.Size()[0]; ++i) {
+		for(int i = 0; i< A.Size()[0]; ++i) {
 			A[0,i] = A[0,i] / a0;
 		}
-		for(ulong i = 0; i< B.Size()[0]; ++i) {
+		for(int i = 0; i< B.Size()[0]; ++i) {
 			B[0,i] = B[0,i] / a0;
 		}		
 	}
 
-	ulong input_size = X.Size()[1];
-	ulong filter_order = max(A.Size()[1], B.Size[1]);
+	int input_size = X.Size()[1];
+	int filter_order = max(A.Size()[1], B.Size[1]);
 	Matrix b = new Matrix(1, filter_order, 0.0);
 	Matrix a = new Matrix(1, filter_order, 0.0);
 	Matrix z = new Matrix(1, filter_order, 0.0);
-	for(ulong i = 0; i<filter_order; ++i) {
+	for(int i = 0; i<filter_order; ++i) {
 		if(i < B.Size()[1]) {
 			b[0,i] = B[0,i];
 		}
@@ -88,8 +88,8 @@ Matrix filter(Matrix B, Matrix A, const Matrix X, const Matrix Zi) pure {
 	}	
 	Y = new Matrix(1, input_size, 0);
 
-	for(ulong i = 0; i<input_size; ++i) {
-		ulong order = filter_order - 1;
+	for(int i = 0; i<input_size; ++i) {
+		int order = filter_order - 1;
         while (order) {
             if (i >= order) {
                 z[0, order - 1] = b[0, order] * X[0, i - order] - a[0, order] * Y[0, i - order] + z[0, order];
@@ -105,11 +105,11 @@ Matrix filter(Matrix B, Matrix A, const Matrix X, const Matrix Zi) pure {
 Matrix filtfilt(Matrix B, Matrix A, const Matrix X) {
 	Matrix Y; // output
 
-    ulong len = X.Size()[1]; // length of input
-    ulong na = A.Size()[1];
-    ulong nb = B.Size()[1];
-    ulong nfilt = (nb > na) ? nb : na;
-    ulong nfact = 3 * (nfilt - 1); // length of edge transients
+    int len = X.Size()[1]; // length of input
+    int na = A.Size()[1];
+    int nb = B.Size()[1];
+    int nfilt = (nb > na) ? nb : na;
+    int nfact = 3 * (nfilt - 1); // length of edge transients
 
     if (len <= nfact) {
     	string msg = "Input data too short! Data must have length more than 3 times filter order.";
@@ -120,7 +120,7 @@ Matrix filtfilt(Matrix B, Matrix A, const Matrix X) {
     // beginning and end of the sequence
 	Matrix b = new Matrix(1, nfilt, 0.0);
 	Matrix a = new Matrix(1, nfilt, 0.0);    
-	for(ulong i = 0; i<nfilt; ++i) {
+	for(int i = 0; i<nfilt; ++i) {
 		if(i < B.Size()[1]) {
 			b[0,i] = B[0,i];
 		}
@@ -129,7 +129,7 @@ Matrix filtfilt(Matrix B, Matrix A, const Matrix X) {
 		}
 	}   
 
-    ulong[] rows, cols;
+    int[] rows, cols;
     //rows = [1:nfilt-1           2:nfilt-1             1:nfilt-2];
     add_index_range(rows, 0, nfilt - 2);
     if (nfilt > 2) {
@@ -144,31 +144,31 @@ Matrix filtfilt(Matrix B, Matrix A, const Matrix X) {
     }
     // data = [1+a(2)         a(3:nfilt)        ones(1,nfilt-2)    -ones(1,nfilt-2)];    
 
-    ulong klen = rows.length;
+    int klen = rows.length;
     double[] data;
     for(int i = 0; i<klen; ++i) {
     	data ~= 0.0;
     }
 
-    data[0] = 1.0 + a[0,1];  ulong j = 1;
+    data[0] = 1.0 + a[0,1];  int j = 1;
     if (nfilt > 2) {
-        for (ulong i = 2; i < nfilt; i++)
+        for (int i = 2; i < nfilt; i++)
             data[j++] = a[0, i];
-        for (ulong i = 0; i < nfilt - 2; i++)
+        for (int i = 0; i < nfilt - 2; i++)
             data[j++] = 1.0;
-        for (ulong i = 0; i < nfilt - 2; i++)
+        for (int i = 0; i < nfilt - 2; i++)
             data[j++] = -1.0;
     }
 
     double[] leftpad = subvector_reverse(X, nfact, 1);
     double _2x0 = 2 * X[0, 0];
-	for(ulong i = 0; i< leftpad.length; ++i) {
+	for(int i = 0; i< leftpad.length; ++i) {
 		leftpad[i] = _2x0 - leftpad[i];
 	}
 
 	double[] rightpad = subvector_reverse(X, len - 2, len - nfact - 1);
     double _2xl = 2 * X[0, len-1];
-	for(ulong i = 0; i< rightpad.length; ++i) {
+	for(int i = 0; i< rightpad.length; ++i) {
 		rightpad[i] = _2xl - rightpad[i];
 	}
 
@@ -182,23 +182,23 @@ Matrix filtfilt(Matrix B, Matrix A, const Matrix X) {
 
     // Calculate initial conditions
     Matrix sp = new Matrix(rows.maxElement+1, cols.maxElement+1, 0.0);
-    for (ulong k = 0; k < klen; ++k) {
+    for (int k = 0; k < klen; ++k) {
         sp[rows[k], cols[k]] = data[k];
     }    
 	Matrix bb = new Matrix(1, nfilt, 0.0);
-	for(ulong i = 0; i<nfilt; ++i) {
+	for(int i = 0; i<nfilt; ++i) {
 		bb[0,i] = b[0,i]; 
 	}
 	Matrix aa = new Matrix(1, nfilt, 0.0);  
-	for(ulong i = 0; i<nfilt; ++i) {
+	for(int i = 0; i<nfilt; ++i) {
 		aa[0,i] = a[0,i]; 
 	}	
 	Matrix bb_segment = new Matrix(1, nfilt-1, 0.0);
-	for(ulong i = 0; i<nfilt-1; ++i) {
+	for(int i = 0; i<nfilt-1; ++i) {
 		bb_segment[0,i] = bb[0,i+1]; 
 	}	
 	Matrix aa_segment = new Matrix(1, nfilt-1, 0.0);
-	for(ulong i = 0; i<nfilt-1; ++i) {
+	for(int i = 0; i<nfilt-1; ++i) {
 		aa_segment[0,i] = aa[0,i+1]; 
 	}		
 
@@ -222,7 +222,7 @@ Matrix filtfilt(Matrix B, Matrix A, const Matrix X) {
 
     // Do the forward and backward filtering
     y0 = signal1[0];
-	for(ulong i = 0; i< zzi.Size()[1]; ++i) {
+	for(int i = 0; i< zzi.Size()[1]; ++i) {
 		zi[i] = zzi[0, i] * y0;
 	}    
 	Matrix signal1_m = new Matrix(signal1);
@@ -230,7 +230,7 @@ Matrix filtfilt(Matrix B, Matrix A, const Matrix X) {
     signal2 = toDouble_v(filter(B, A, signal1_m, zi_m));
     signal2 = signal2.reverse;
     y0 = signal2[0];
-	for(ulong i = 0; i< zzi.Size()[1]; ++i) {
+	for(int i = 0; i< zzi.Size()[1]; ++i) {
 		zi[i] = zzi[0, i] * y0;
 	} 
 	Matrix signal2_m = new Matrix(signal2); 
