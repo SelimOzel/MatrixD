@@ -209,20 +209,12 @@ void main() {
 		[ -5, -3,  5,  4, -3],
 		[ 13, 15,  7, -4,  5]]);
 		Matrix[3] LU_Five = Five.LU_Decomposition();
-
-		//writeln(toCSV(Five));
-		//writeln(toCSV(LU_Five[0]));
-		//writeln(toCSV(LU_Five[1]));	
-		//writeln("Det - LU:"~to!string(Five.Det_LU()));	
-
-		//Matrix Inv_5_by_5_result = Five.Inv()*Five;
 		Matrix Inv_5_by_5_result = Five.Inv_LU()*Five;
-		writeln(Inv_5_by_5_result.toCSV);	
-		//writeln("Det: "~to!string(Ten.Det(10)));	
-		//assert(0 < Ten.Det(Ten.Size()[0]));	
+		writeln((Inv_5_by_5_result*Five).toCSV);	
 
 		myStopWatch.stop();
 		writeln("5x5 Matrix constructor + determinant + inverse takes: "~to!string((to!double(myStopWatch.peek.total!"usecs")*0.000001))~" seconds");
+		writeln();
 		myStopWatch.reset();
 
 		// 7x7 matrix performance
@@ -237,20 +229,12 @@ void main() {
 		[  10, -2,  0,  9, 4,   6, 14],
 		[  28,  8,  3, 11, 7,  32, 15]]);
 		Matrix[3] LU_Seven = Seven.LU_Decomposition();
-
-		//writeln(toCSV(Seven));
-		//writeln(toCSV(LU_Seven[0]));
-		//writeln(toCSV(LU_Seven[1]));	
-		//writeln("Det - LU:"~to!string(Seven.Det_LU()));	
-
-		//Matrix Inv_7_by_7_result = Seven.Inv()*Seven;
 		Matrix Inv_7_by_7_result = Seven.Inv_LU()*Seven;
-		//writeln(Inv_7_by_7_result.toCSV);	
-		//writeln("Det: "~to!string(Ten.Det(10)));	
-		//assert(0 < Ten.Det(Ten.Size()[0]));	
+		writeln((Inv_7_by_7_result*Seven).toCSV);
 
 		myStopWatch.stop();
 		writeln("7x7 Matrix constructor + determinant + inverse takes: "~to!string((to!double(myStopWatch.peek.total!"usecs")*0.000001))~" seconds");
+		writeln();
 		myStopWatch.reset();
 
 		// 9x9 matrix performance
@@ -267,20 +251,12 @@ void main() {
 		[  8,  9, -7,   4, 13, 15,  18,  -8,  1],
 		[  1,  0,  3,  14, 19, 12,   2,  11,  3]]);
 		Matrix[3] LU_Nine = Nine.LU_Decomposition();
-
-		//writeln(toCSV(Seven));
-		//writeln(toCSV(LU_Seven[0]));
-		//writeln(toCSV(LU_Seven[1]));	
-		//writeln("Det - LU:"~to!string(Seven.Det_LU()));	
-
-		//Matrix Inv_9_by_9_result = Nine.Inv()*Nine;
 		Matrix Inv_9_by_9_result = Nine.Inv_LU()*Nine;
-		//writeln(Inv_7_by_7_result.toCSV);	
-		//writeln("Det: "~to!string(Ten.Det(10)));	
-		//assert(0 < Ten.Det(Ten.Size()[0]));	
+		writeln((Inv_9_by_9_result*Nine).toCSV);
 
 		myStopWatch.stop();
 		writeln("9x9 Matrix constructor + determinant + inverse takes: "~to!string((to!double(myStopWatch.peek.total!"usecs")*0.000001))~" seconds");
+		writeln();
 		myStopWatch.reset();
 
 		// 10x10 matrix performance

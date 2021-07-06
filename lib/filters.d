@@ -2,6 +2,7 @@ module matrixd.filters;
 
 // D
 import std.algorithm: max, reverse, maxElement;
+import std.conv: to;
 import std.math: PI;
 import std.stdio;
 
@@ -144,7 +145,7 @@ Matrix filtfilt(Matrix B, Matrix A, const Matrix X) {
     }
     // data = [1+a(2)         a(3:nfilt)        ones(1,nfilt-2)    -ones(1,nfilt-2)];    
 
-    int klen = rows.length;
+    int klen = to!int(rows.length);
     double[] data;
     for(int i = 0; i<klen; ++i) {
     	data ~= 0.0;

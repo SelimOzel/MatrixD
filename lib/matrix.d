@@ -82,7 +82,7 @@ pure {
 
 // A = double[][]
 this(const double[][] matrixRHS_IN) pure {
-	initialize(matrixRHS_IN.length, matrixRHS_IN[0].length, 0.0);
+	initialize(to!int(matrixRHS_IN.length), to!int(matrixRHS_IN[0].length), 0.0);
 	for(int r = 0; r < _nr; ++r) {
 		for(int c = 0; c < _nc; ++c) {
 			_m[r][c] = matrixRHS_IN[r][c];
@@ -92,7 +92,7 @@ this(const double[][] matrixRHS_IN) pure {
 
 // A = double[]
 this(const double[] rowvectorRHS_IN) pure {
-	initialize(1, rowvectorRHS_IN.length, 0.0);
+	initialize(1, to!int(rowvectorRHS_IN.length), 0.0);
 	for(int r = 0; r < _nr; ++r) {
 		for(int c = 0; c < _nc; ++c) {
 			_m[r][c] = rowvectorRHS_IN[c];
@@ -119,7 +119,7 @@ this(const int[int] x) pure {
 
 // A = [[x1, x2 ...], [y1, y2, ...]]
 void opAssign(const double[][] matrixRHS_IN) pure {
-	initialize(matrixRHS_IN.length, matrixRHS_IN[0].length, 0.0);
+	initialize(to!int(matrixRHS_IN.length), to!int(matrixRHS_IN[0].length), 0.0);
 	for(int r = 0; r < _nr; ++r) {
 		for(int c = 0; c < _nc; ++c) {
 			_m[r][c] = matrixRHS_IN[r][c];
@@ -284,7 +284,7 @@ double opIndex(int r, int c) pure const {
 		throw new Exception(row_err);
 	}
 	if(c >= _nc) {
-		string row_err = "opIndex[][]: row length error";
+		string row_err = "opIndex[][]: column length error";
 		throw new Exception(row_err);
 	}	
 	return _m[r][c];
@@ -365,7 +365,7 @@ Matrix[3] LU_Decomposition() pure const {
 	        lower[j, j] = 1;
 	        for (int i = j + 1; i < nr; ++i)
 	            lower[i, j] = input1[to!int(perm[0, i])][j];
-	        for (size_t i = 0; i <= j; ++i)
+	        for (int i = 0; i <= j; ++i)
 	            upper[i, j] = input1[to!int(perm[0, i])][j];
 	    }
  
@@ -412,7 +412,7 @@ Matrix Inv() pure const {
 	}    
 }
 
-Matrix Inv_LU() {
+Matrix Inv_LU() pure const {
 	int nr = Size()[0];
 	int nc = Size()[1];
 
@@ -434,7 +434,7 @@ Matrix Inv_LU() {
 	    for (int i = 0; i<nr; ++i) {
 		    x = lup_solve(LU[0], LU[1], LU[2], e[i].T());
 		    for(int j = 0; j<nr; ++j) {
-		    	inverse[i,j] = x[0,j];
+		    	inverse[i,j] = x[j,0];
 		    }
 	    }
 	    return inverse;
@@ -599,14 +599,12 @@ void cofactor(ref Matrix temp, int p, int q, int n) pure const {
 // x = forward_sub(L, b) is the solution to L x = b
 // L must be a lower-triangular matrix
 // b must be a vector of the same leading dimension as L
-Matrix forward_sub(Matrix L, Matrix b) {
+Matrix forward_sub(Matrix L, Matrix b) pure const {
     int nr = L.Size()[0];
     Matrix x = new Matrix(nr, 1, 0.0);
     for (int i = 0; i<nr; ++i) {
         double tmp = b[i,0];
         for (int j = 0; j<i-1; ++j){
-        	import std.stdio: writeln;
-        	writeln(i);
             tmp -= L[i,j] * x[j,0];
         }
         x[i,0] = tmp / L[i,i];
@@ -634,7 +632,7 @@ Matrix back_sub(Matrix U, Matrix b) pure const {
 // L must be a lower-triangular matrix
 // U must be an upper-triangular matrix of the same size as L
 // b must be a vector of the same leading dimension as L
-Matrix lu_solve(Matrix L, Matrix U, Matrix b) {	
+Matrix lu_solve(Matrix L, Matrix U, Matrix b) pure const {	
     Matrix y = forward_sub(L, b);
     Matrix x = back_sub(U, y);
     return x;
@@ -645,15 +643,14 @@ Matrix lu_solve(Matrix L, Matrix U, Matrix b) {
 // U must be an upper-triangular matrix of the same shape as L
 // P must be a permutation matrix of the same shape as L
 // b must be a vector of the same leading dimension as L
-Matrix lup_solve(Matrix L, Matrix U, Matrix P, Matrix b) {
+Matrix lup_solve(Matrix L, Matrix U, Matrix P, Matrix b) pure const {
     Matrix z = P*b;
     Matrix x = lu_solve(L, U, z);
     return x;
 }
 
 // Obtained from geeks-for-geeks: https://www.geeksforgeeks.org/adjoint-inverse-matrix/
-void adjoint(ref Matrix adj) pure const
-{ 
+void adjoint(ref Matrix adj) pure const { 
 	int N = _nr;
     if (N == 1) { 
         adj[0,0] = 1.0; 
