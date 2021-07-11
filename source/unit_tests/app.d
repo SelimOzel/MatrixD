@@ -28,7 +28,7 @@ import plt = matplotlibd.pyplot;
 void main() {
 	writeln("Starting matrix tests ...");
 
-	bool test_matrix = true;
+	bool test_matrix = false;
 	bool test_matrix_inverse = true;
 	bool test_statistics = false; // just a bunch of thing I want to call easily
 	bool test_filters = false;
@@ -150,6 +150,29 @@ void main() {
 		import std.conv: to;
 		import std.datetime.stopwatch: StopWatch, AutoStart;
 
+		// Solve a linear equation
+		// Solution:
+		// [[(-7)/17], = -0.41176470588
+		//  [(-56)/17], = -3.29411764706
+ 		//  [43/17], = 2.52941176471
+ 		//  [6/17]] = 0.35294117647
+		Matrix A_equations = new Matrix(
+		[[1, 2, 3, 4],
+		 [0, 3, 4, 5],
+		 [1, 0, 2, 1],
+		 [3, 4, 5, 2]]);
+
+		Matrix B_equations = new Matrix(
+		[[2],
+		 [2],
+		 [5],
+		 [4]]);
+
+		Matrix[3] A_equations_LU = A_equations.LU_Decomposition();	
+		Matrix x_equations = A_equations.lup_solve(A_equations_LU[0], A_equations_LU[1], A_equations_LU[2], B_equations);
+		writeln(toCSV(x_equations));
+
+
 		//writeln("LU Decomp-1");
 		Matrix lu_decomp_1 = new Matrix(
 		[[ 2.0, -1.0, -2.0],
@@ -164,24 +187,24 @@ void main() {
 		//writeln("LU Decomp-1: 3x3 Determinant LUP: "~to!string(lu_decomp_1.Det_LU()));	
 		//writeln();
 
-		writeln("LU Decomp-2");
+		//writeln("LU Decomp-2");
 		Matrix lu_decomp_2 = new Matrix(
 		[[ 1.0,  3.0,  5.0],
 		[  2.0,  4.0,  7.0],
 		[  1.0,  1.0,  0.0]]);
 		Matrix[3] LU_2 = lu_decomp_2.LU_Decomposition();
-		writeln(toCSV(lu_decomp_2));
-		writeln(toCSV(LU_2[0]));
-		writeln(toCSV(LU_2[1]));	
-		writeln(toCSV(LU_2[2]));
-		writeln("LU Decomp-2: 3x3 Determinant: "~to!string(lu_decomp_2.Det(3)));
-		writeln("LU Decomp-2: 3x3 Determinant LUP: "~to!string(lu_decomp_2.Det_LU()));	
+		//writeln(toCSV(lu_decomp_2));
+		//writeln(toCSV(LU_2[0]));
+		//writeln(toCSV(LU_2[1]));	
+		//writeln(toCSV(LU_2[2]));
+		//writeln("LU Decomp-2: 3x3 Determinant: "~to!string(lu_decomp_2.Det(3)));
+		//writeln("LU Decomp-2: 3x3 Determinant LUP: "~to!string(lu_decomp_2.Det_LU()));
+		Matrix lu_decomp_2_result = lu_decomp_2.Inv()*lu_decomp_2;	
 		Matrix lu_decomp_2_result_lu = lu_decomp_2.Inv_LU()*lu_decomp_2;
-		Matrix lu_decomp_2_result = lu_decomp_2.Inv()*lu_decomp_2;
-		writeln(lu_decomp_2_result.toCSV);	
-		writeln();
-		writeln(lu_decomp_2_result_lu.toCSV);
-		writeln();
+		//writeln(lu_decomp_2_result.toCSV);	
+		//writeln();
+		//writeln(lu_decomp_2_result_lu.toCSV);
+		//writeln();
 
 		//writeln("LU Decomp-3");
 		Matrix lu_decomp_3 = new Matrix(

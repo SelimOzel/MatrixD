@@ -444,6 +444,17 @@ Matrix Inv_LU() pure const {
 	}    
 }
 
+// x = lup_solve(L, U, P, b) is the solution to L U x = P b
+// L must be a lower-triangular matrix
+// U must be an upper-triangular matrix of the same shape as L
+// P must be a permutation matrix of the same shape as L
+// b must be a vector of the same leading dimension as L
+Matrix lup_solve(Matrix L, Matrix U, Matrix P, Matrix b) pure const {
+    Matrix z = P*b;
+    Matrix x = lu_solve(L, U, z);
+    return x;
+}
+
 double Det_LU() pure const {
 	Matrix[3] LU = LU_Decomposition();
 	int nr = Size()[0];
@@ -635,17 +646,6 @@ Matrix back_sub(Matrix U, Matrix b) pure const {
 Matrix lu_solve(Matrix L, Matrix U, Matrix b) pure const {	
     Matrix y = forward_sub(L, b);
     Matrix x = back_sub(U, y);
-    return x;
-}
-
-// x = lup_solve(L, U, P, b) is the solution to L U x = P b
-// L must be a lower-triangular matrix
-// U must be an upper-triangular matrix of the same shape as L
-// P must be a permutation matrix of the same shape as L
-// b must be a vector of the same leading dimension as L
-Matrix lup_solve(Matrix L, Matrix U, Matrix P, Matrix b) pure const {
-    Matrix z = P*b;
-    Matrix x = lu_solve(L, U, z);
     return x;
 }
 
