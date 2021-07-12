@@ -170,6 +170,14 @@ void main() {
 
 		Matrix[3] A_equations_LU = A_equations.LU_Decomposition();	
 		Matrix x_equations = A_equations.lup_solve(A_equations_LU[0], A_equations_LU[1], A_equations_LU[2], B_equations);
+		
+		writeln(toCSV(A_equations));
+		writeln(toCSV(A_equations_LU[0]));
+		writeln(toCSV(A_equations_LU[1]));	
+		writeln(toCSV(A_equations_LU[2]));
+		writeln("Ax = b Determinant: "~to!string(A_equations.Det(4)));
+		writeln("Ax = b Determinant LUP: "~to!string(A_equations.Det_LU()));		
+
 		writeln(toCSV(x_equations));
 
 
