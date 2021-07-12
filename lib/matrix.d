@@ -369,6 +369,8 @@ Matrix[3] LU_Decomposition() pure const {
 	            upper[i, j] = input1[to!int(perm[0, i])][j];
 	    }
  
+
+ 
     	for (int i = 0; i < nr; ++i)
         	pivot[i, to!int(perm[0,i])] = 1.0;
 	}
@@ -412,7 +414,7 @@ Matrix Inv() pure const {
 	}    
 }
 
-Matrix Inv_LU() pure const {
+Matrix Inv_LU()  {
 	int nr = Size()[0];
 	int nc = Size()[1];
 
@@ -449,7 +451,7 @@ Matrix Inv_LU() pure const {
 // U must be an upper-triangular matrix of the same shape as L
 // P must be a permutation matrix of the same shape as L
 // b must be a vector of the same leading dimension as L
-Matrix lup_solve(Matrix L, Matrix U, Matrix P, Matrix b) pure const {
+Matrix lup_solve(Matrix L, Matrix U, Matrix P, Matrix b) {
     Matrix z = P*b;
     Matrix x = lu_solve(L, U, z);
     return x;
@@ -643,9 +645,13 @@ Matrix back_sub(Matrix U, Matrix b) pure const {
 // L must be a lower-triangular matrix
 // U must be an upper-triangular matrix of the same size as L
 // b must be a vector of the same leading dimension as L
-Matrix lu_solve(Matrix L, Matrix U, Matrix b) pure const {	
+Matrix lu_solve(Matrix L, Matrix U, Matrix b)  {	
     Matrix y = forward_sub(L, b);
+
+    import std.stdio: writeln;
+    writeln("LU Solve debug");
     Matrix x = back_sub(U, y);
+    writeln(x.toCSV);
     return x;
 }
 

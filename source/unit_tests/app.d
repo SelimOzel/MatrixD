@@ -208,7 +208,7 @@ void main() {
 		//writeln("LU Decomp-2: 3x3 Determinant: "~to!string(lu_decomp_2.Det(3)));
 		//writeln("LU Decomp-2: 3x3 Determinant LUP: "~to!string(lu_decomp_2.Det_LU()));
 		Matrix lu_decomp_2_result = lu_decomp_2.Inv()*lu_decomp_2;	
-		Matrix lu_decomp_2_result_lu = lu_decomp_2.Inv_LU()*lu_decomp_2;
+		//Matrix lu_decomp_2_result_lu = lu_decomp_2.Inv_LU()*lu_decomp_2;
 		//writeln(lu_decomp_2_result.toCSV);	
 		//writeln();
 		//writeln(lu_decomp_2_result_lu.toCSV);
@@ -253,7 +253,7 @@ void main() {
 		[ -5, -3,  5,  4, -3],
 		[ 13, 15,  7, -4,  5]]);
 		Matrix[3] LU_Five = Five.LU_Decomposition();
-		Matrix Inv_5_by_5_result = Five.Inv_LU()*Five;
+		//Matrix Inv_5_by_5_result = Five.Inv_LU()*Five;
 		//writeln((Inv_5_by_5_result*Five).toCSV);	
 		//writeln("5x5 Determinant: "~to!string(Five.Det_LU()));
 		//writeln("5x5 Determinant LUP: "~to!string(Five.Det(5)));
@@ -276,7 +276,7 @@ void main() {
 		[  10, -2,  0,  9, 4,   6, 14],
 		[  28,  8,  3, 11, 7,  32, 15]]);
 		Matrix[3] LU_Seven = Seven.LU_Decomposition();
-		Matrix Inv_7_by_7_result = Seven.Inv_LU()*Seven;
+		//Matrix Inv_7_by_7_result = Seven.Inv_LU()*Seven;
 		//writeln((Inv_7_by_7_result*Seven).toCSV);
 
 		myStopWatch.stop();
@@ -298,7 +298,7 @@ void main() {
 		[  8,  9, -7,   4, 13, 15,  18,  -8,  1],
 		[  1,  0,  3,  14, 19, 12,   2,  11,  3]]);
 		Matrix[3] LU_Nine = Nine.LU_Decomposition();
-		Matrix Inv_9_by_9_result = Nine.Inv_LU()*Nine;
+		//Matrix Inv_9_by_9_result = Nine.Inv_LU()*Nine;
 		//writeln((Inv_9_by_9_result*Nine).toCSV);
 
 		myStopWatch.stop();
