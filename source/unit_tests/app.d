@@ -303,12 +303,12 @@ void main() {
 		[  8,  9, -7,   4, 13, 15,  18,  -8,  1],
 		[  1,  0,  3,  14, 19, 12,   2,  11,  3]]);
 		Matrix[3] LU_Nine = Nine.LU_Decomposition();
-		//Matrix Inv_9_by_9_result = Nine.Inv_LU()*Nine;
-		//writeln((Inv_9_by_9_result*Nine).toCSV);
+		Matrix Inv_9_by_9_result = Nine.Inv_LU()*Nine;
+		writeln((Inv_9_by_9_result*Nine).toCSV);
 
 		myStopWatch.stop();
-		//writeln("9x9 Matrix constructor + determinant + inverse takes: "~to!string((to!double(myStopWatch.peek.total!"usecs")*0.000001))~" seconds");
-		//writeln();
+		writeln("9x9 Matrix constructor + determinant + inverse takes: "~to!string((to!double(myStopWatch.peek.total!"usecs")*0.000001))~" seconds");
+		writeln();
 		myStopWatch.reset();
 
 		// 10x10 matrix performance
