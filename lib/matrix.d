@@ -617,7 +617,7 @@ Matrix forward_sub(Matrix L, Matrix b) pure const {
     Matrix x = new Matrix(nr, 1, 0.0);
     for (int i = 0; i<nr; ++i) {
         double tmp = b[i,0];
-        for (int j = 0; j<i-1; ++j){
+        for (int j = 0; j<i; ++j){
             tmp -= L[i,j] * x[j,0];
         }
         x[i,0] = tmp / L[i,i];

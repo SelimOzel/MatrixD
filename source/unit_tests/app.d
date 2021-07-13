@@ -178,7 +178,7 @@ void main() {
 		writeln("Ax = b Determinant: "~to!string(A_equations.Det(4)));
 		writeln("Ax = b Determinant LUP: "~to!string(A_equations.Det_LU()));		
 
-		writeln(toCSV(x_equations));
+		writeln(toCSV(A_equations*x_equations));
 
 
 		//writeln("LU Decomp-1");
