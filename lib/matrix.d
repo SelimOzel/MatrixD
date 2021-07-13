@@ -414,7 +414,7 @@ Matrix Inv_LU()  {
 	if(nr == nc) {	
 	    // Find determinant of A[][] 
 	    double determinant = Det_LU(); 
-	    if (determinant <= float.epsilon) { 
+	    if (abs(determinant) <= float.epsilon) { 
 	        throw new Exception("Inverse error: determinant must be non-zero\n"); 
 	    } 
 		// decompose into lower, upper triangular and obtain pivot matrix
