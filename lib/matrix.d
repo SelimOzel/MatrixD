@@ -2,7 +2,7 @@ module matrixd.matrix;
 
 // D
 import std.conv: to; 
-import std.math: sin;
+import std.math: abs, pow, sin;
 import std.random: dice;
 
 // Enums
@@ -320,7 +320,6 @@ Matrix T() pure const {
 
 // Lower upper triangle decomposition
 Matrix[3] LU_Decomposition() pure const {
-	import std.math: abs;
 	Matrix[3] result;
 
 	int nr = Size()[0];
@@ -331,10 +330,8 @@ Matrix[3] LU_Decomposition() pure const {
 	Matrix pivot = new Matrix(nr, nr, 0.0);
 
 	if(nr == nc) {	
-
     	Matrix perm = new Matrix([0:nc]);     	
     	double[MAXCOLUMNS][MAXROWS] input1 = _m;
-
 	    for (int j = 0; j < nr; ++j) {
 	        int max_index = j;
 	        double max_value = 0;
@@ -360,7 +357,6 @@ Matrix[3] LU_Decomposition() pure const {
 	                input1[ii][k] -= input1[ii][j] * input1[jj][k];
 	        }
 	    }
- 
 	    for (int j = 0; j < nr; ++j) {
 	        lower[j, j] = 1;
 	        for (int i = j + 1; i < nr; ++i)
@@ -368,9 +364,6 @@ Matrix[3] LU_Decomposition() pure const {
 	        for (int i = 0; i <= j; ++i)
 	            upper[i, j] = input1[to!int(perm[0, i])][j];
 	    }
- 
-
- 
     	for (int i = 0; i < nr; ++i)
         	pivot[i, to!int(perm[0,i])] = 1.0;
 	}
@@ -421,7 +414,7 @@ Matrix Inv_LU()  {
 	if(nr == nc) {	
 	    // Find determinant of A[][] 
 	    double determinant = Det_LU(); 
-	    if (determinant == 0) { 
+	    if (determinant <= float.epsilon) { 
 	        throw new Exception("Inverse error: determinant must be non-zero\n"); 
 	    } 
 		// decompose into lower, upper triangular and obtain pivot matrix
@@ -434,9 +427,9 @@ Matrix Inv_LU()  {
 	    Matrix inverse = new Matrix(nr,nr,0.0);	    
 	    Matrix x;
 	    for (int i = 0; i<nr; ++i) {
-		    x = lup_solve(LU[0], LU[1], LU[2], e[i].T());
+		    x = lup_solve(LU[0], LU[1], LU[2], e[i].T);
 		    for(int j = 0; j<nr; ++j) {
-		    	inverse[i,j] = x[j,0];
+		    	inverse[j,i] = x[j,0];
 		    }
 	    }
 	    return inverse;
@@ -451,7 +444,7 @@ Matrix Inv_LU()  {
 // U must be an upper-triangular matrix of the same shape as L
 // P must be a permutation matrix of the same shape as L
 // b must be a vector of the same leading dimension as L
-Matrix lup_solve(Matrix L, Matrix U, Matrix P, Matrix b) {
+Matrix lup_solve(Matrix L, Matrix U, Matrix P, Matrix b) pure const {
     Matrix z = P*b;
     Matrix x = lu_solve(L, U, z);
     return x;
@@ -461,14 +454,12 @@ double Det_LU() pure const {
 	Matrix[3] LU = LU_Decomposition();
 	int nr = Size()[0];
 	double det = 1.0;
-
 	Matrix P = LU[2];
 	double nswaps = to!double(P.Diag().Size()[0]) - P.Diag().Sum() - 1.0;
-
 	for(int i = 0; i< nr; ++i) {
 		det *= LU[1][i,i];
 	}
-	return det*-1^^nswaps;
+	return det*pow(-1,nswaps);
 }
 
 // Obtained from geeks-for-geeks: https://www.geeksforgeeks.org/determinant-of-a-matrix/
@@ -645,13 +636,9 @@ Matrix back_sub(Matrix U, Matrix b) pure const {
 // L must be a lower-triangular matrix
 // U must be an upper-triangular matrix of the same size as L
 // b must be a vector of the same leading dimension as L
-Matrix lu_solve(Matrix L, Matrix U, Matrix b)  {	
+Matrix lu_solve(Matrix L, Matrix U, Matrix b) pure const {	
     Matrix y = forward_sub(L, b);
-
-    import std.stdio: writeln;
-    writeln("LU Solve debug");
     Matrix x = back_sub(U, y);
-    writeln(x.toCSV);
     return x;
 }
 

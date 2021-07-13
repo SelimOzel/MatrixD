@@ -1,4 +1,6 @@
 // D
+import std.conv: to;
+import std.datetime.stopwatch: StopWatch, AutoStart;
 import std.math: sin, PI;
 import std.stdio;
 
@@ -144,18 +146,14 @@ void main() {
 		assert(G[1, 1] == 2);
 		writeln("Matrix tests passed!");
 	}
-
 	if(test_matrix_inverse) {
-		import matrixd.matrix: toCSV;
-		import std.conv: to;
-		import std.datetime.stopwatch: StopWatch, AutoStart;
-
 		// Solve a linear equation
-		// Solution:
-		// [[(-7)/17], = -0.41176470588
-		//  [(-56)/17], = -3.29411764706
- 		//  [43/17], = 2.52941176471
- 		//  [6/17]] = 0.35294117647
+		// Solution: x vector is 
+		// -0.41176470588,
+		// -3.29411764706,
+ 		// 2.52941176471,
+ 		// 0.35294117647,
+ 		writeln("Ax=b");
 		Matrix A_equations = new Matrix(
 		[[1, 2, 3, 4],
 		 [0, 3, 4, 5],
@@ -171,48 +169,55 @@ void main() {
 		Matrix[3] A_equations_LU = A_equations.LU_Decomposition();	
 		Matrix x_equations = A_equations.lup_solve(A_equations_LU[0], A_equations_LU[1], A_equations_LU[2], B_equations);
 		
+		writeln("A");
 		writeln(toCSV(A_equations));
+		writeln("A's lower");
 		writeln(toCSV(A_equations_LU[0]));
+		writeln("A's upper");
 		writeln(toCSV(A_equations_LU[1]));	
+		writeln("A's pivot");
 		writeln(toCSV(A_equations_LU[2]));
 		writeln("Ax = b Determinant: "~to!string(A_equations.Det(4)));
-		writeln("Ax = b Determinant LUP: "~to!string(A_equations.Det_LU()));		
-
+		writeln("Ax = b Determinant LUP: "~to!string(A_equations.Det_LU()));
+		writeln("Result of A times x: ");		
 		writeln(toCSV(A_equations*x_equations));
+		assert((A_equations*x_equations)[0,0] - B_equations[0,0] <= float.epsilon);
+		assert((A_equations*x_equations)[1,0] - B_equations[1,0] <= float.epsilon);
+		assert((A_equations*x_equations)[2,0] - B_equations[2,0] <= float.epsilon);
+		assert((A_equations*x_equations)[3,0] - B_equations[3,0] <= float.epsilon);
 
-
-		//writeln("LU Decomp-1");
+		writeln("LU Decomp-1");
 		Matrix lu_decomp_1 = new Matrix(
 		[[ 2.0, -1.0, -2.0],
 		[ -4.0,  6.0,  3.0],
 		[ -4.0, -2.0,  8.0]]);
 		Matrix[3] LU_1 = lu_decomp_1.LU_Decomposition();
-		//writeln(toCSV(lu_decomp_1));
-		//writeln(toCSV(LU_1[0]));
-		//writeln(toCSV(LU_1[1]));	
-		//writeln(toCSV(LU_1[2]));
-		//writeln("LU Decomp-1: 3x3 Determinant: "~to!string(lu_decomp_1.Det(3)));
-		//writeln("LU Decomp-1: 3x3 Determinant LUP: "~to!string(lu_decomp_1.Det_LU()));	
-		//writeln();
+		writeln(toCSV(lu_decomp_1));
+		writeln(toCSV(LU_1[0]));
+		writeln(toCSV(LU_1[1]));	
+		writeln(toCSV(LU_1[2]));
+		writeln("LU Decomp-1: 3x3 Determinant: "~to!string(lu_decomp_1.Det(3)));
+		writeln("LU Decomp-1: 3x3 Determinant LUP: "~to!string(lu_decomp_1.Det_LU()));	
+		writeln();
 
-		//writeln("LU Decomp-2");
+		writeln("LU Decomp-2");
 		Matrix lu_decomp_2 = new Matrix(
 		[[ 1.0,  3.0,  5.0],
 		[  2.0,  4.0,  7.0],
 		[  1.0,  1.0,  0.0]]);
 		Matrix[3] LU_2 = lu_decomp_2.LU_Decomposition();
-		//writeln(toCSV(lu_decomp_2));
-		//writeln(toCSV(LU_2[0]));
-		//writeln(toCSV(LU_2[1]));	
-		//writeln(toCSV(LU_2[2]));
-		//writeln("LU Decomp-2: 3x3 Determinant: "~to!string(lu_decomp_2.Det(3)));
-		//writeln("LU Decomp-2: 3x3 Determinant LUP: "~to!string(lu_decomp_2.Det_LU()));
+		writeln(toCSV(lu_decomp_2));
+		writeln(toCSV(LU_2[0]));
+		writeln(toCSV(LU_2[1]));	
+		writeln(toCSV(LU_2[2]));
+		writeln("LU Decomp-2: 3x3 Determinant: "~to!string(lu_decomp_2.Det(3)));
+		writeln("LU Decomp-2: 3x3 Determinant LUP: "~to!string(lu_decomp_2.Det_LU()));
 		Matrix lu_decomp_2_result = lu_decomp_2.Inv()*lu_decomp_2;	
-		//Matrix lu_decomp_2_result_lu = lu_decomp_2.Inv_LU()*lu_decomp_2;
-		//writeln(lu_decomp_2_result.toCSV);	
-		//writeln();
-		//writeln(lu_decomp_2_result_lu.toCSV);
-		//writeln();
+		Matrix lu_decomp_2_result_lu = lu_decomp_2.Inv_LU()*lu_decomp_2;
+		writeln(lu_decomp_2_result.toCSV);	
+		writeln();
+		writeln(lu_decomp_2_result_lu.toCSV);
+		writeln();
 
 		//writeln("LU Decomp-3");
 		Matrix lu_decomp_3 = new Matrix(
