@@ -259,7 +259,7 @@ void main() {
 		[ 13, 15,  7, -4,  5]]);
 		Matrix[3] LU_Five = Five.LU_Decomposition();
 		Matrix Inv_5_by_5_result = Five.Inv_LU()*Five;
-		writeln((Inv_5_by_5_result*Five).toCSV);	
+		writeln((Inv_5_by_5_result).toCSV);	
 		writeln("5x5 Determinant: "~to!string(Five.Det_LU()));
 		writeln("5x5 Determinant LUP: "~to!string(Five.Det(5)));
 		writeln();
@@ -282,7 +282,7 @@ void main() {
 		[  28,  8,  3, 11, 7,  32, 15]]);
 		Matrix[3] LU_Seven = Seven.LU_Decomposition();
 		Matrix Inv_7_by_7_result = Seven.Inv_LU()*Seven;
-		writeln((Inv_7_by_7_result*Seven).toCSV);
+		writeln((Inv_7_by_7_result).toCSV);
 
 		myStopWatch.stop();
 		writeln("7x7 Matrix constructor + determinant + inverse takes: "~to!string((to!double(myStopWatch.peek.total!"usecs")*0.000001))~" seconds");
@@ -304,7 +304,7 @@ void main() {
 		[  1,  0,  3,  14, 19, 12,   2,  11,  3]]);
 		Matrix[3] LU_Nine = Nine.LU_Decomposition();
 		Matrix Inv_9_by_9_result = Nine.Inv_LU()*Nine;
-		writeln((Inv_9_by_9_result*Nine).toCSV);
+		writeln((Inv_9_by_9_result).toCSV);
 
 		myStopWatch.stop();
 		writeln("9x9 Matrix constructor + determinant + inverse takes: "~to!string((to!double(myStopWatch.peek.total!"usecs")*0.000001))~" seconds");
