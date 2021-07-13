@@ -6,8 +6,8 @@ import std.math: abs, pow, sin;
 import std.random: dice;
 
 // Enums
-enum uint MAXROWS = 32;
-enum uint MAXCOLUMNS = 1001;
+enum uint MAXROWS = 256;
+enum uint MAXCOLUMNS = 256;
 
 // Output is csv
 string toCSV(const Matrix matrix_IN) {
