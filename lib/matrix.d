@@ -7,7 +7,7 @@ import std.random: dice;
 
 // Enums
 enum uint MAXROWS = 256;
-enum uint MAXCOLUMNS = 256;
+enum uint MAXCOLUMNS = 257;
 
 // Output is csv
 string toCSV(const Matrix matrix_IN) {
@@ -407,7 +407,7 @@ Matrix Inv() pure const {
 	}    
 }
 
-Matrix Inv_LU()  {
+Matrix Inv_LU() pure const {
 	int nr = Size()[0];
 	int nc = Size()[1];
 
