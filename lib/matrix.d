@@ -6,7 +6,7 @@ import std.math: abs, pow, sin;
 import std.random: dice;
 
 // Enums
-enum uint MAXROWS = 11;
+enum uint MAXROWS = 32;
 enum uint MAXCOLUMNS = 1001;
 
 // Output is csv
