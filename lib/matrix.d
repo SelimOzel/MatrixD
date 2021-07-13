@@ -308,6 +308,7 @@ Matrix opIndex(int r) pure const {
 }
 
 // Transpose
+@safe
 Matrix T() pure const {
 	Matrix transpose = new Matrix(_nc, _nr, 0.0);
 	for (int r=0; r<transpose.Size()[0]; r++) {
@@ -319,6 +320,7 @@ Matrix T() pure const {
 }
 
 // Lower upper triangle decomposition
+@safe
 Matrix[3] LU_Decomposition() pure const {
 	Matrix[3] result;
 
@@ -377,6 +379,7 @@ Matrix[3] LU_Decomposition() pure const {
 	return result;
 }
 
+@safe
 Matrix Inv() pure const {
 	int nr = Size()[0];
 	int nc = Size()[1];
@@ -407,6 +410,7 @@ Matrix Inv() pure const {
 	}    
 }
 
+@safe
 Matrix Inv_LU() pure const {
 	int nr = Size()[0];
 	int nc = Size()[1];
@@ -444,12 +448,14 @@ Matrix Inv_LU() pure const {
 // U must be an upper-triangular matrix of the same shape as L
 // P must be a permutation matrix of the same shape as L
 // b must be a vector of the same leading dimension as L
+@safe
 Matrix lup_solve(Matrix L, Matrix U, Matrix P, Matrix b) pure const {
     Matrix z = P*b;
     Matrix x = lu_solve(L, U, z);
     return x;
 }
 
+@safe
 double Det_LU() pure const {
 	Matrix[3] LU = LU_Decomposition();
 	int nr = Size()[0];
@@ -463,6 +469,7 @@ double Det_LU() pure const {
 }
 
 // Obtained from geeks-for-geeks: https://www.geeksforgeeks.org/determinant-of-a-matrix/
+@safe
 double Det(int n) pure const {
 	int nr = Size()[0];
 	int nc = Size()[1];
@@ -494,6 +501,7 @@ double Det(int n) pure const {
 }
 
 // Sums all elements
+@safe
 double Sum() pure const {
 	double all_sum = 0.0;
 	for(int r = 0; r < _nr; r++) {
@@ -505,6 +513,7 @@ double Sum() pure const {
 }    
 
 // Sums all elements in row r.
+@safe
 double Sum(const int r) pure const {
 	if(r < _nr) {
 		double row_sum = 0.0;
@@ -520,6 +529,7 @@ double Sum(const int r) pure const {
 }	
 
 // returns a matrix containing all diagonals
+@safe
 Matrix Diag() pure const {
 	if(_nr != _nc) {
 		string diag_square_err = "Diag: not a square";
@@ -533,6 +543,7 @@ Matrix Diag() pure const {
 }
 
 // create nxn identity
+@safe
 Matrix Identity(int n) pure const {
 	Matrix result = new Matrix(n, n, 0.0);
 	for(int i = 0; i<n; ++i) {
@@ -542,11 +553,13 @@ Matrix Identity(int n) pure const {
 }
 
 // [rows, cols]
+@safe
 int[2] Size() pure const {
 	return [_nr, _nc];
 }    
 
 // 0 rows, 0 cols is empty
+@safe
 bool empty() pure const {
 	if(Size()[0] == 0 && Size()[1] == 0) return true;
 	else return false;
@@ -577,6 +590,7 @@ pure {
 }
 
 // Obtained from geeks-for-geeks: https://www.geeksforgeeks.org/determinant-of-a-matrix/
+@safe
 void cofactor(ref Matrix temp, int p, int q, int n) pure const {
     int i = 0, j = 0; 
   
@@ -603,6 +617,7 @@ void cofactor(ref Matrix temp, int p, int q, int n) pure const {
 // x = forward_sub(L, b) is the solution to L x = b
 // L must be a lower-triangular matrix
 // b must be a vector of the same leading dimension as L
+@safe
 Matrix forward_sub(Matrix L, Matrix b) pure const {
     int nr = L.Size()[0];
     Matrix x = new Matrix(nr, 1, 0.0);
@@ -619,6 +634,7 @@ Matrix forward_sub(Matrix L, Matrix b) pure const {
 // x = back_sub(U, b) is the solution to U x = b
 // U must be an upper-triangular matrix
 // b must be a vector of the same leading dimension as U
+@safe
 Matrix back_sub(Matrix U, Matrix b) pure const {
     int nr = U.Size()[0];
     Matrix x = new Matrix(nr, 1, 0.0);
@@ -636,6 +652,7 @@ Matrix back_sub(Matrix U, Matrix b) pure const {
 // L must be a lower-triangular matrix
 // U must be an upper-triangular matrix of the same size as L
 // b must be a vector of the same leading dimension as L
+@safe
 Matrix lu_solve(Matrix L, Matrix U, Matrix b) pure const {	
     Matrix y = forward_sub(L, b);
     Matrix x = back_sub(U, y);
@@ -643,6 +660,7 @@ Matrix lu_solve(Matrix L, Matrix U, Matrix b) pure const {
 }
 
 // Obtained from geeks-for-geeks: https://www.geeksforgeeks.org/adjoint-inverse-matrix/
+@safe
 void adjoint(ref Matrix adj) pure const { 
 	int N = _nr;
     if (N == 1) { 
